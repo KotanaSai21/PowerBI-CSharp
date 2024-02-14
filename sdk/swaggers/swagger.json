@@ -9,9 +9,7 @@
         "https"
     ],
     "consumes": [],
-     "produces": [
-                    "application/json"
-                ],
+    "produces": ["application/json"],
     "paths": {
         "/v1.0/myorg/datasets": {
             "get": {
@@ -239,9 +237,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -313,9 +309,7 @@
                 "description": "\n## Required Scope\n\nDataset.ReadWrite.All\n<br><br>",
                 "operationId": "Datasets_DeleteDataset",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -473,9 +467,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -567,9 +559,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -646,9 +636,7 @@
                 "description": "\n## Required Scope\n\nDataset.ReadWrite.All\n\n## Limitations\n\nThis API call only supports **push datasets**. For a complete list of limitations, see [Push datasets limitations](/power-bi/developer/embedded/push-datasets-limitations).\n<br><br>",
                 "operationId": "Datasets_DeleteRows",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -821,9 +809,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -1130,9 +1116,7 @@
                 "description": "\n## Required Scope\n\nDataset.ReadWrite.All\n<br><br>",
                 "operationId": "Datasets_CancelRefresh",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -1238,9 +1222,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -1417,9 +1399,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -1599,7 +1579,7 @@
                 "deprecated": false
             }
         },
-        "/v1.0/myorg/datasets/{datasetId}/Default.UpdateParameters": {
+"/v1.0/myorg/datasets/{datasetId}/Default.UpdateParameters": {
             "post": {
                 "tags": [
                     "Datasets"
@@ -1610,9 +1590,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": [],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -1913,7 +1891,7 @@
                 "deprecated": false
             }
         },
-        "/v1.0/myorg/datasets/{datasetId}/Default.UpdateDatasources": {
+"/v1.0/myorg/datasets/{datasetId}/Default.UpdateDatasources": {
             "post": {
                 "tags": [
                     "Datasets"
@@ -1924,9 +1902,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": [],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -2001,9 +1977,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": [],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -2054,9 +2028,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": [],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -2341,9 +2313,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -2417,9 +2387,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -2564,9 +2532,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -2630,9 +2596,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "datasetId",
@@ -2756,9 +2720,7 @@
                 "description": "\nWhen a user is granted permissions to a workspace, app, or Power BI item (such as a report or a dashboard), the new permissions might not be immediately available through API calls. This operation refreshes user permissions to ensure they're fully updated.\n\n> [!IMPORTANT]\n>\n> - Call **Refresh User Permissions** before making other API calls.\n> - Since it takes about two minutes for the permissions to get refreshed, wait for two minutes before making other API calls.\n\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nWorkspace.Read.All or Workspace.ReadWrite.All\n\n## Limitations\n\nMaximum one call per user per hour.\n<br><br>",
                 "operationId": "Users_RefreshUserPermissions",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -2776,7 +2738,7 @@
                 "deprecated": false
             }
         },
-        "/v1.0/myorg/imports": {
+"/v1.0/myorg/imports": {
             "get": {
                 "tags": [
                     "Imports"
@@ -2844,7 +2806,7 @@
                 "description": "\nSee the [Import Large Files](https://github.com/microsoft/PowerBI-Developer-Samples/blob/master/PowerShell%20Scripts/Import%20Large%20Files) PowerShell script for an example of using this API.\n\n> [!NOTE]\n> Supported content:\n> - Power BI .pbix files\n> - JSON files (.json)\n> - Excel files (.xlsx)\n> - RDL files (.rdl)\n\n- To import a file, specify the content type **multipart/form-data** in the request headers and encode the file as [form data](https://www.w3.org/TR/html401/interact/forms.html) in the request body.\n- To import an .rdl file, include the file extension in the name specified by `datasetDisplayName`, as described in [URI parameters](/rest/api/power-bi/imports/post-import-in-group#uri-parameters).\n- To import an .xlsx file from OneDrive for Business, include the content type **application/json** in the request headers. Include [ImportInfo](/rest/api/power-bi/imports/post-import-in-group#importinfo) with `filePath` set to the .xlsx file path in the request body.\n- To import large Power BI .pbix files that are between 1 GB and 10 GB in size, see [Create Temporary Upload Location](/rest/api/power-bi/imports/create-temporary-upload-location). This is only supported for Premium capacity workspaces.\n- To create a dataflow from a model.json file, set `datasetDisplayName` to *model.json*, as described in [URI parameters](/rest/api/power-bi/imports/post-import-in-group#uri-parameters).\n\n## Required Scope\n\nDataset.ReadWrite.All\n\n## Limitations\n\n- Dataflows with service principal aren't supported.\n- Importing a Power BI .pbix file from OneDrive isn't supported.\n- Importing a file that has a **protected** sensitivity label isn't supported for service principals.\n<br><br>",
                 "operationId": "Imports_PostImport",
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -3006,7 +2968,7 @@
                 }
             }
         },
-        "/v1.0/myorg/imports/{importId}": {
+            "/v1.0/myorg/imports/{importId}": {
             "get": {
                 "tags": [
                     "Imports"
@@ -3219,9 +3181,7 @@
                 "description": "\n## Required Scope\n\nReport.ReadWrite.All\n<br><br>",
                 "operationId": "Reports_DeleteReport",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "reportId",
@@ -3415,9 +3375,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "reportId",
@@ -3618,7 +3576,7 @@
                 "deprecated": false
             }
         },
-        "/v1.0/myorg/reports/{reportId}/Default.UpdateDatasources": {
+"/v1.0/myorg/reports/{reportId}/Default.UpdateDatasources": {
             "post": {
                 "tags": [
                     "Reports"
@@ -3629,9 +3587,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": [],
                 "parameters": [
                     {
                         "name": "reportId",
@@ -3997,9 +3953,7 @@
                 "description": "\n## Required Scope\n\nDashboard.ReadWrite.All\n<br><br>",
                 "operationId": "Dashboards_DeleteDashboard",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "dashboardId",
@@ -4492,9 +4446,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -4577,9 +4529,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nDataset.ReadWrite.All\n<br><br>",
                 "operationId": "Datasets_DeleteDatasetInGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -4665,9 +4615,7 @@
                 "description": "\n## Required Scope\n\nDataset.ReadWrite.All\n\n## Limitations\n\nThis API call only supports **push datasets**.\n<br><br>",
                 "operationId": "Datasets_PutTableInGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -4766,9 +4714,7 @@
                 "description": "\n## Required Scope\n\nDataset.ReadWrite.All\n\n## Limitations\n\n- This API call only supports **push datasets**.\n- See [Power BI REST API limitations](/power-bi/developer/automation/api-rest-api-limitations).\n<br><br>",
                 "operationId": "Datasets_PostRowsInGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -4854,9 +4800,7 @@
                 "description": "\n## Required Scope\n\nDataset.ReadWrite.All\n\n## Limitations\n\nThis API call only supports **push datasets**. For a complete list of limitations, see [Push datasets limitations](/power-bi/developer/embedded/push-datasets-limitations).\n<br><br>",
                 "operationId": "Datasets_DeleteRowsInGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -5048,9 +4992,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -5377,9 +5319,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nDataset.ReadWrite.All\n<br><br>",
                 "operationId": "Datasets_CancelRefreshInGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -5503,9 +5443,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -5704,9 +5642,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -5903,9 +5839,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -6258,9 +6192,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -6343,9 +6275,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -6405,9 +6335,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -6608,9 +6536,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nDataset.ReadWrite.All\n<br><br>",
                 "operationId": "Datasets_TakeOverInGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -6871,7 +6797,7 @@
                 }
             }
         },
-        "/v1.0/myorg/groups/{groupId}/imports": {
+"/v1.0/myorg/groups/{groupId}/imports": {
             "get": {
                 "tags": [
                     "Imports"
@@ -6950,7 +6876,7 @@
                 "description": "\n> [!NOTE]\n> Supported content:\n>\n> - Power BI .pbix files\n> - JSON files (.json)\n> - Excel files (.xlsx)\n> - SQL Server Report Definition Language files (.rdl)\n\n- To import a file, specify the content type **multipart/form-data** in the request headers and encode the file as [form data](https://www.w3.org/TR/html401/interact/forms.html) in the request body.\n- To import an .rdl file, include the file extension in the name specified by `datasetDisplayName`, as described in [URI parameters](/rest/api/power-bi/imports/post-import-in-group#uri-parameters).\n- To import an .xlsx file from OneDrive for Business, include the content type **application/json** in the request headers. Include [ImportInfo](/rest/api/power-bi/imports/post-import-in-group#importinfo) with `filePath` set to the .xlsx file path in the request body.\n- To import large Power BI .pbix files that are between 1 GB and 10 GB in size, see [Create Temporary Upload Location In Group](/rest/api/power-bi/imports/create-temporary-upload-location-in-group) and the [Import Large Files](https://github.com/microsoft/PowerBI-Developer-Samples/blob/master/PowerShell%20Scripts/Import%20Large%20Files) PowerShell script. This is only supported for Premium capacity workspaces.\n- To create a dataflow from a model.json file, set `datasetDisplayName` to *model.json*, as described in [URI parameters](/rest/api/power-bi/imports/post-import-in-group#uri-parameters).\n\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nDataset.ReadWrite.All\n\n## Limitations\n\n- Dataflows with service principal aren't supported.\n- Importing a Power BI .pbix file from OneDrive isn't supported.\n- Importing a file that has a **protected** sensitivity label isn't supported for service principals.\n<br><br>",
                 "operationId": "Imports_PostImportInGroup",
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -7124,7 +7050,7 @@
                 }
             }
         },
-        "/v1.0/myorg/groups/{groupId}/imports/{importId}": {
+     "/v1.0/myorg/groups/{groupId}/imports/{importId}": {
             "get": {
                 "tags": [
                     "Imports"
@@ -7376,9 +7302,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nReport.ReadWrite.All\n<br><br>",
                 "operationId": "Reports_DeleteReportInGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -7607,9 +7531,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -7854,9 +7776,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -8283,9 +8203,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nDashboard.ReadWrite.All\n<br><br>",
                 "operationId": "Dashboards_DeleteDashboardInGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -9726,9 +9644,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nDataflow.ReadWrite.All\n<br><br>",
                 "operationId": "Dataflows_DeleteDataflow",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -9830,7 +9746,7 @@
                 "deprecated": false
             }
         },
-        "/v1.0/myorg/groups/{groupId}/dataflows/{dataflowId}/refreshes": {
+"/v1.0/myorg/groups/{groupId}/dataflows/{dataflowId}/refreshes": {
             "post": {
                 "tags": [
                     "Dataflows"
@@ -9841,9 +9757,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": [],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -9875,7 +9789,6 @@
                         "in": "query",
                         "required": false,
                         "type": "string",
-                        "format": "uuid",
                         "enum": [
                             "default",
                             "processFull"
@@ -9979,7 +9892,7 @@
                 "deprecated": false
             }
         },
-        "/v1.0/myorg/groups/{groupId}/dataflows": {
+"/v1.0/myorg/groups/{groupId}/dataflows": {
             "get": {
                 "tags": [
                     "Dataflows"
@@ -10085,9 +9998,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -10626,9 +10537,7 @@
                 "description": "\n## Permissions\n\nThe user must have gateway admin permissions.\n\n## Required Scope\n\nDataset.ReadWrite.All\n\n## Limitations\n\nVirtual network (VNet) gateways aren't supported.\n<br><br>",
                 "operationId": "Gateways_DeleteDatasource",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "gatewayId",
@@ -10672,9 +10581,7 @@
                 "summary": "Updates the credentials of the specified data source from the specified gateway.",
                 "description": "\nOn Premises data source credentials must be encrypted, as described in the [On-premise encrypted credentials example](/rest/api/power-bi/gateways/update-datasource#on-premise-encrypted-credentials-example). \n\n See the [Patch Datasource Credentials](https://github.com/microsoft/PowerBI-Developer-Samples/blob/master/PowerShell%20Scripts/PatchDatasourceCredentials.ps1) PowerShell script for an example of using this API, this script uses the PowerShell script mentioned in the note below for encrypting the credentials. \n\n> [!NOTE]\n> - To encrypt credentials, see [Configure credentials programmatically](/power-bi/developer/embedded/configure-credentials) for Power BI and review the EncryptCredentials [.NET Core](https://github.com/microsoft/PowerBI-Developer-Samples/tree/master/.NET%20Core/EncryptCredentials), [Java](https://github.com/microsoft/PowerBI-Developer-Samples/tree/master/Java/EncryptCredentials), [Python](https://github.com/microsoft/PowerBI-Developer-Samples/tree/master/Python/Encrypt%20credentials) and [PowerShell](https://github.com/microsoft/PowerBI-Developer-Samples/blob/master/PowerShell%20Scripts/EncryptGatewayCredentials.ps1) examples.\n> - Windows credentials before encryption look like the credentials in the credentials of [Basic credentials example](/rest/api/power-bi/gateways/update-datasource#basic-credentials-example).\n\nWhen changing from single sign-on to other credential types, such as `Basic` or `OAuth2`, set the parameter `useEndUserOAuth2Credentials` to `false` as described in the [Basic credentials example](/rest/api/power-bi/gateways/update-datasource#basic-credentials-example).\n\nOAuth 2.0 credentials are valid as long as the provided token is valid. When using the OAuth 2.0 credential type, do the following: \n- Set the OAuth 2.0 token audience correctly, according to the data source type. \n- Send the OAuth 2.0 token in the payload as shown in the [OAuth 2.0 credentials example](/rest/api/power-bi/gateways/update-datasource#oauth-2.0-credentials-example).\n- If you're using **Extension** data sources, don't set `useCallerAADIdentity` to `true`.\n\n## Permissions\n\n- With on-premises gateways, the user must have gateway admin permissions.\n- With cloud data sources, user must be the data source owner. Use [Datasets - Take Over API](/rest/api/power-bi/datasets/take-over-in-group) to transfer ownership over the specified dataset or [Paginated reports - Take Over API](/rest/api/power-bi/reports/take-over-in-group) to transfer ownership of the data sources over the specified paginated report.\n- This API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nDataset.ReadWrite.All\n\n## Limitations\n\n- When setting OAuth credentials, a refresh token isn't incorporated as it is when setting credentials through the UI in Power BI service. Therefore, credentials can only be used for one hour.\n- Virtual network (VNet) gateways aren't supported.\n- SAS Token credentials are supported only with AzureBlobStorage and AzureDataLakeStorage.\n<br><br>",                "operationId": "Gateways_UpdateDatasource",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "gatewayId",
@@ -10959,9 +10866,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "gatewayId",
@@ -11036,9 +10941,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "gatewayId",
@@ -11288,9 +11191,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nWorkspace.Read.All or Workspace.ReadWrite.All\n\n## Limitations\n\n- User permissions for workspaces take time to get updated and may not be immediately available when using API calls. To refresh user permissions, use the [Refresh User Permissions](/rest/api/power-bi/users/refresh-user-permissions) API call.\n<br><br>",
                 "operationId": "Groups_GetGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -11338,9 +11239,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nWorkspace.ReadWrite.All\n<br><br>",
                 "operationId": "Groups_DeleteGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -11376,9 +11275,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nWorkspace.ReadWrite.All\n\n## Limitations\n\n- For Shared capacities, only the name can be updated.\n- For Premium capacities, only the name and defaultDatasetStorageFormat can be updated.\n- The name must be unique inside an organization.\n<br><br>",
                 "operationId": "Groups_UpdateGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -11511,9 +11408,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -11577,9 +11472,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -11643,9 +11536,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nWorkspace.ReadWrite.All\n<br><br>",
                 "operationId": "Groups_DeleteUserInGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -11857,9 +11748,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "capacityId",
@@ -12522,9 +12411,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "requestParameters",
@@ -12567,9 +12454,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -13070,9 +12955,7 @@
                 "description": "\n## Required Scope\n\nPipeline.ReadWrite.All\n\n## Limitations\n\nThis operation will fail if there's an active deployment operation.\n<br><br>",
                 "operationId": "Pipelines_DeletePipeline",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "pipelineId",
@@ -13171,9 +13054,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "pipelineId",
@@ -13251,9 +13132,7 @@
                 "description": "\n## Required Scope\n\nPipeline.ReadWrite.All\n<br><br>",
                 "operationId": "Pipelines_DeletePipelineUser",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "pipelineId",
@@ -13379,9 +13258,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "pipelineId",
@@ -13440,9 +13317,7 @@
                 "description": "\n## Required Scope\n\nPipeline.ReadWrite.All\n\n## Limitations\n\nThis operation will fail if there's an active deployment operation.\n<br><br>",
                 "operationId": "Pipelines_UnassignWorkspace",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "pipelineId",
@@ -14053,9 +13928,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -14670,9 +14543,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "requestParameters",
@@ -14722,9 +14593,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "requestParameters",
@@ -15396,9 +15265,7 @@
                 "description": "\nTo unassign a Log Analytics workspace, explicitly set the value to null.\n\n## Permissions\n\nThe user must have administrator rights (such as Office 365 Global Administrator or Power BI Service Administrator).\n\n## Required Scope\n\nTenant.ReadWrite.All\n\n## Limitations\n\n- Maximum 200 requests per hour.\n- For Shared capacities, only the name and description can be updated.\n- For Premium capacities, only the name, description, defaultDatasetStorageFormat and Log Analytics workspace can be updated.\n- The name must be unique inside an organization.\n<br><br>",
                 "operationId": "Groups_UpdateGroupAsAdmin",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -15545,9 +15412,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -15585,7 +15450,7 @@
                             "200": {}
                         }
                     },
-                    "Add eecurity group to workspace example": {
+                    "Add security group to workspace example": {
                         "parameters": {
                             "groupId": "206d27ca-94e8-4a69-855b-5c32bdd458a8",
                             "userDetails": {
@@ -15624,9 +15489,7 @@
                 "description": "\nThis API call supports removing a user, security group, M365 group and service principal.Please use email address or UPN for user, group object Id for group and app object Id for service principal to delete.\n\n## Permissions\n\nThe user must have administrator rights (such as Office 365 Global Administrator or Power BI Service Administrator).\n\n## Required Scope\n\nTenant.ReadWrite.All\n\n## Limitations\n\nMaximum 200 requests per hour.\n<br><br>",
                 "operationId": "Groups_DeleteUserAsAdmin",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -15692,6 +15555,15 @@
                         "responses": {
                             "200": {}
                         }
+                    },
+                    "Delete guest user example": {
+                        "parameters": {
+                            "groupId": "f7d76f5a-7190-43c6-bf12-7a135c6c2d23",
+                            "user": "john_contoso.com%23EXT%23@test.com"
+                        },
+                        "responses": {
+                            "200": {}
+                        }
                     }
                 },
                 "deprecated": false
@@ -15708,9 +15580,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -17269,9 +17139,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "capacityId",
@@ -18721,6 +18589,27 @@
                                 }
                             }
                         }
+                    },
+                    "Example with Guest User": {
+                        "parameters": {
+                            "userId": "testUser_microsoft.com%23EXT%23@contoso.com"
+                        },
+                        "responses": {
+                            "200": {
+                                "body": {
+                                    "artifactAccessEntities": [
+                                        {
+                                            "artifactId": "41ce06d1-d81b-4ea0-bc6d-2ce3dd2f8e87",
+                                            "displayName": "test report",
+                                            "artifactType": "Report",
+                                            "accessRight": "ReadWrite"
+                                        }
+                                    ],
+                                    "continuationUri": "https://api.powerbi.com/v1.0/myorg/admin/users/testUser_microsoft.com%23EXT%23%40contoso.com/artifactAccess?continuationToken='LDEsMTAwMDAwLDA%3D'",
+                                    "continuationToken": "LDEsMTAwMDAwLDA%3D"
+                                }
+                            }
+                        }
                     }
                 },
                 "deprecated": false
@@ -19549,9 +19438,7 @@
                 "consumes": [
                     "application/json"
                 ],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "pipelineId",
@@ -19629,9 +19516,7 @@
                 "description": "\n## Permissions\n\nThe user must have administrator rights.\n\n## Required Scope\n\nTenant.ReadWrite.All\n\n## Limitations\n\nMaximum 200 requests per hour.\n<br><br>",
                 "operationId": "Pipelines_DeleteUserAsAdmin",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "pipelineId",
@@ -19788,9 +19673,7 @@
                 "description": "\n## Permissions\n\nThe user must have administrator rights.\n\n## Required Scope\n\nTenant.ReadWrite.All\n<br><br>",
                 "operationId": "Profiles_DeleteProfileAsAdmin",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "profileId",
@@ -19916,9 +19799,7 @@
                 "description": "\n## Permissions\n\nThis API call can be called by a service principal profile. For more information see: [Service principal profiles in Power BI Embedded](/power-bi/developer/embedded/embed-multi-tenancy).\n\n## Required Scope\n\nReport.ReadWrite.All\n\n## Limitations\n\nOnly supports paginated reports.\n<br><br>",
                 "operationId": "Reports_TakeOverInGroup",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "groupId",
@@ -20204,9 +20085,7 @@
                 "description": "<br/>Deletes the specified profile if it exists and belongs to service principal caller.\n\n## Limitations\n\nCan only be called by a service principal.",
                 "operationId": "Profiles_DeleteProfile",
                 "consumes": [],
-                 "produces": [
-                    "application/json"
-                ],
+                "produces": ["application/json"],
                 "parameters": [
                     {
                         "name": "profileId",
@@ -22472,7 +22351,7 @@
                         "$ref": "#/definitions/WorkspaceInfoDashboard"
                     }
                 },
-                "datasets": {
+"datasets": {
                     "type": "array",
                     "description": "The datasets associated with this workspace. The list of dataset properties returned varies for different API calls, so you might not see all dataset properties in an API response.",
                     "items": {
@@ -22897,7 +22776,7 @@
                 {
                     "$ref": "#/definitions/DatasetStorageMode"
                 },
-                {
+{
                     "$ref": "#/definitions/WorkspaceInfoDataflowProperties"
                 },
                 {
@@ -23567,6 +23446,19 @@
             }
         },
         "DependentDatamart": {
+            "description": "A Power BI dependent datamart",
+            "properties": {
+                "targetDatamartId": {
+                    "type": "string",
+                    "description": "The target datamart ID"
+                },
+                "groupId": {
+                    "type": "string",
+                    "description": "The target group ID"
+                }
+            }
+        },
+        "DependentDatamarts": {
             "description": "A Power BI dependent datamart",
             "properties": {
                 "targetDatamartId": {
@@ -25543,7 +25435,7 @@
                             },
                             {
                                 "value": "PartialBatch",
-                                "description": "Commit the refresh operation in batches"
+                                "description": "Commit the refresh operation in batches. When utilizing `partialBatch` mode, the refresh operation does not occur within a transaction. Consequently, each command will be committed individually, and in the event of a failure, the model may end up in a state where only a subset of the data is loaded, or the table is left empty. If you desire to guarantee the preservation of previous data in case of a failure, you should execute the operation with `commitMode = transactional.`"
                             }
                         ]
                     }
@@ -28181,12 +28073,12 @@
                     "items": {
                         "$ref": "#/definitions/DependentDataflow"
                     }
-                },
-                "upstreamDatamarts": {
+},
+                "upstreamDatamart": {
                     "type": "array",
                     "description": "The list of all the datamarts this item depends on",
                     "items": {
-                        "$ref": "#/definitions/DependentDatamart"
+                        "$ref": "#/definitions/DependentDatamarts"
                     }
                 }
             }

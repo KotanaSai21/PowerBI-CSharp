@@ -4,6 +4,10 @@
     <TargetFrameworks>netstandard2.0;net48</TargetFrameworks>
     <ProjectGuid>{1EE969AD-7923-4855-AACA-2A1B790BB0F1}</ProjectGuid>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Nullable>annotations</Nullable>
+    <LangVersion>11.0</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <IncludeGeneratorSharedCode>true</IncludeGeneratorSharedCode>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
@@ -50,7 +54,6 @@
   <!--.NETstandard Properties-->
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.24" />
     <PackageReference Include="System.Security.Cryptography.Cng" Version="4.7.0" />
   </ItemGroup>
   
@@ -99,6 +102,9 @@
     <Compile Include="..\..\.version\PipelineAssemblyInfo.cs">
       <Link>PipelineAssemblyInfo.cs</Link>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Core" Version="1.37.0" />
   </ItemGroup>  
 
   <PropertyGroup Condition=" '$(CdpxPostSigning)' == 'true' ">
