@@ -20,10 +20,18 @@ namespace Microsoft.PowerBI.Api.Models
             writer.WritePropertyName("connectionDetails"u8);
             writer.WriteStringValue(ConnectionDetails);
             writer.WritePropertyName("credentialDetails"u8);
-            writer.WriteObjectValue(CredentialDetails);
+            writer.WriteObjectValue<CredentialDetails>(CredentialDetails);
             writer.WritePropertyName("dataSourceName"u8);
             writer.WriteStringValue(DataSourceName);
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<PublishDatasourceToGatewayRequest>(this);
+            return content;
         }
     }
 }

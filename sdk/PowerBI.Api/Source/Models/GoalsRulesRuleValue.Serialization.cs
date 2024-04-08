@@ -7,6 +7,7 @@
 
 using System;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -19,7 +20,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(PercentOf))
             {
                 writer.WritePropertyName("percentOf"u8);
-                writer.WriteObjectValue(PercentOf);
+                writer.WriteObjectValue<GoalsRulesPercentOf>(PercentOf);
             }
             if (Optional.IsDefined(Field))
             {
@@ -45,10 +46,10 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<GoalsRulesPercentOf> percentOf = default;
-            Optional<string> field = default;
-            Optional<DateTimeOffset> dateTime = default;
-            Optional<double> number = default;
+            GoalsRulesPercentOf percentOf = default;
+            string field = default;
+            DateTimeOffset? dateTime = default;
+            double? number = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("percentOf"u8))
@@ -84,7 +85,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new GoalsRulesRuleValue(percentOf.Value, field.Value, Optional.ToNullable(dateTime), Optional.ToNullable(number));
+            return new GoalsRulesRuleValue(percentOf, field, dateTime, number);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static GoalsRulesRuleValue FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeGoalsRulesRuleValue(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<GoalsRulesRuleValue>(this);
+            return content;
         }
     }
 }

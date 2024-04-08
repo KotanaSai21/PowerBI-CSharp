@@ -7,6 +7,7 @@
 
 using System;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -62,14 +63,14 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<int> rowSpan = default;
-            Optional<int> colSpan = default;
-            Optional<string> embedUrl = default;
-            Optional<string> embedData = default;
+            int? rowSpan = default;
+            int? colSpan = default;
+            string embedUrl = default;
+            string embedData = default;
             Guid id = default;
-            Optional<string> title = default;
-            Optional<Guid> reportId = default;
-            Optional<string> datasetId = default;
+            string title = default;
+            Guid? reportId = default;
+            string datasetId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("rowSpan"u8))
@@ -125,7 +126,31 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Tile(id, title.Value, Optional.ToNullable(reportId), datasetId.Value, Optional.ToNullable(rowSpan), Optional.ToNullable(colSpan), embedUrl.Value, embedData.Value);
+            return new Tile(
+                id,
+                title,
+                reportId,
+                datasetId,
+                rowSpan,
+                colSpan,
+                embedUrl,
+                embedData);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new Tile FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeTile(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Tile>(this);
+            return content;
         }
     }
 }

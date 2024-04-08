@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -21,9 +21,9 @@ namespace Microsoft.PowerBI.Api.Models
             int index = default;
             DeploymentStepType type = default;
             PipelineOperationStatus status = default;
-            Optional<DeploymentExecutionStepPreDeploymentDiffState> preDeploymentDiffState = default;
-            Optional<DeploymentSourceAndTarget> sourceAndTarget = default;
-            Optional<DeploymentError> error = default;
+            DeploymentExecutionStepPreDeploymentDiffState? preDeploymentDiffState = default;
+            DeploymentSourceAndTarget sourceAndTarget = default;
+            DeploymentError error = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("index"u8))
@@ -69,7 +69,21 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DeploymentExecutionStep(index, type, status, Optional.ToNullable(preDeploymentDiffState), sourceAndTarget.Value, error.Value);
+            return new DeploymentExecutionStep(
+                index,
+                type,
+                status,
+                preDeploymentDiffState,
+                sourceAndTarget,
+                error);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DeploymentExecutionStep FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDeploymentExecutionStep(document.RootElement);
         }
     }
 }

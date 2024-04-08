@@ -25,9 +25,17 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(Bookmark))
             {
                 writer.WritePropertyName("bookmark"u8);
-                writer.WriteObjectValue(Bookmark);
+                writer.WriteObjectValue<PageBookmark>(Bookmark);
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<ExportReportPage>(this);
+            return content;
         }
     }
 }

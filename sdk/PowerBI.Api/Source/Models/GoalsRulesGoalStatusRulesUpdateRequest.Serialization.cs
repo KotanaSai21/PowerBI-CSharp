@@ -21,13 +21,21 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Rules)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<GoalsRulesRule1OfInt32>(item);
                 }
                 writer.WriteEndArray();
             }
             writer.WritePropertyName("defaultOutput"u8);
             writer.WriteNumberValue(DefaultOutput);
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<GoalsRulesGoalStatusRulesUpdateRequest>(this);
+            return content;
         }
     }
 }

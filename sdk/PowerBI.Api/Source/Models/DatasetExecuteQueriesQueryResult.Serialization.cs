@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,8 +19,8 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IReadOnlyList<DatasetExecuteQueriesTableResult>> tables = default;
-            Optional<DatasetExecuteQueriesError> error = default;
+            IReadOnlyList<DatasetExecuteQueriesTableResult> tables = default;
+            DatasetExecuteQueriesError error = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("tables"u8))
@@ -47,7 +47,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasetExecuteQueriesQueryResult(Optional.ToList(tables), error.Value);
+            return new DatasetExecuteQueriesQueryResult(tables ?? new ChangeTrackingList<DatasetExecuteQueriesTableResult>(), error);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasetExecuteQueriesQueryResult FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasetExecuteQueriesQueryResult(document.RootElement);
         }
     }
 }

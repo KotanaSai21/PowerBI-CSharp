@@ -113,7 +113,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(createPipelineRequest);
+            content.JsonWriter.WriteObjectValue<CreatePipelineRequest>(createPipelineRequest);
             request.Content = content;
             return message;
         }
@@ -271,7 +271,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(updatePipelineRequest);
+            content.JsonWriter.WriteObjectValue<UpdatePipelineRequest>(updatePipelineRequest);
             request.Content = content;
             return message;
         }
@@ -491,7 +491,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(userDetails);
+            content.JsonWriter.WriteObjectValue<PipelineUser>(userDetails);
             request.Content = content;
             return message;
         }
@@ -711,7 +711,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(assignWorkspaceRequest);
+            content.JsonWriter.WriteObjectValue<AssignWorkspaceRequest>(assignWorkspaceRequest);
             request.Content = content;
             return message;
         }
@@ -1104,7 +1104,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(deployRequest);
+            content.JsonWriter.WriteObjectValue<DeployAllRequest>(deployRequest);
             request.Content = content;
             return message;
         }
@@ -1211,7 +1211,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(deployRequest);
+            content.JsonWriter.WriteObjectValue<SelectiveDeployRequest>(deployRequest);
             request.Content = content;
             return message;
         }
@@ -1503,7 +1503,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(userDetails);
+            content.JsonWriter.WriteObjectValue<PipelineUser>(userDetails);
             request.Content = content;
             return message;
         }

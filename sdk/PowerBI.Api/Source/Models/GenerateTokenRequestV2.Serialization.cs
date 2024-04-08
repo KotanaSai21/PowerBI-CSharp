@@ -21,7 +21,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Datasets)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<GenerateTokenRequestV2Dataset>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -31,7 +31,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Reports)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<GenerateTokenRequestV2Report>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -41,7 +41,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in TargetWorkspaces)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<GenerateTokenRequestV2TargetWorkspace>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -51,7 +51,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Identities)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<EffectiveIdentity>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -66,11 +66,19 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in DatasourceIdentities)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DatasourceIdentity>(item);
                 }
                 writer.WriteEndArray();
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<GenerateTokenRequestV2>(this);
+            return content;
         }
     }
 }

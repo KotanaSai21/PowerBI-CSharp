@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,8 +19,8 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IReadOnlyList<DependentDataflow>> upstreamDataflows = default;
-            Optional<IReadOnlyList<DependentDatamart>> upstreamDatamarts = default;
+            IReadOnlyList<DependentDataflow> upstreamDataflows = default;
+            IReadOnlyList<DependentDatamart> upstreamDatamarts = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("upstreamDataflows"u8))
@@ -52,7 +52,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatamartUpstreamProperties(Optional.ToList(upstreamDataflows), Optional.ToList(upstreamDatamarts));
+            return new DatamartUpstreamProperties(upstreamDataflows ?? new ChangeTrackingList<DependentDataflow>(), upstreamDatamarts ?? new ChangeTrackingList<DependentDatamart>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatamartUpstreamProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatamartUpstreamProperties(document.RootElement);
         }
     }
 }

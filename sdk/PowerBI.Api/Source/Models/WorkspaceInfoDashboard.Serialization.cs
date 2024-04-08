@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -25,7 +26,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(SensitivityLabel))
             {
                 writer.WritePropertyName("sensitivityLabel"u8);
-                writer.WriteObjectValue(SensitivityLabel);
+                writer.WriteObjectValue<SensitivityLabel>(SensitivityLabel);
             }
             if (Optional.IsCollectionDefined(Tiles))
             {
@@ -33,7 +34,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Tiles)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<WorkspaceInfoTile>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -43,7 +44,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DashboardUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -73,14 +74,14 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> dataClassification = default;
-            Optional<SensitivityLabel> sensitivityLabel = default;
-            Optional<IList<WorkspaceInfoTile>> tiles = default;
-            Optional<IList<DashboardUser>> users = default;
+            string dataClassification = default;
+            SensitivityLabel sensitivityLabel = default;
+            IList<WorkspaceInfoTile> tiles = default;
+            IList<DashboardUser> users = default;
             Guid id = default;
-            Optional<string> displayName = default;
-            Optional<bool> isReadOnly = default;
-            Optional<string> appId = default;
+            string displayName = default;
+            bool? isReadOnly = default;
+            string appId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("dataClassification"u8))
@@ -150,7 +151,31 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new WorkspaceInfoDashboard(id, displayName.Value, Optional.ToNullable(isReadOnly), appId.Value, dataClassification.Value, sensitivityLabel.Value, Optional.ToList(tiles), Optional.ToList(users));
+            return new WorkspaceInfoDashboard(
+                id,
+                displayName,
+                isReadOnly,
+                appId,
+                dataClassification,
+                sensitivityLabel,
+                tiles ?? new ChangeTrackingList<WorkspaceInfoTile>(),
+                users ?? new ChangeTrackingList<DashboardUser>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new WorkspaceInfoDashboard FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorkspaceInfoDashboard(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<WorkspaceInfoDashboard>(this);
+            return content;
         }
     }
 }

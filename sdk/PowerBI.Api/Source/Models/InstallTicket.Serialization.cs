@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -41,6 +41,14 @@ namespace Microsoft.PowerBI.Api.Models
                 }
             }
             return new InstallTicket(ticket, ticketId, expiration);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static InstallTicket FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeInstallTicket(document.RootElement);
         }
     }
 }

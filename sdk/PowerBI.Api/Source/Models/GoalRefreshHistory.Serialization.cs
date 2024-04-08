@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,12 +19,12 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<Guid> goalId = default;
-            Optional<GoalValueType> connectionType = default;
-            Optional<GoalProcessingStatus> status = default;
-            Optional<DateTimeOffset> timestamp = default;
-            Optional<Guid> rootActivityId = default;
-            Optional<string> message = default;
+            Guid? goalId = default;
+            GoalValueType? connectionType = default;
+            GoalProcessingStatus? status = default;
+            DateTimeOffset? timestamp = default;
+            Guid? rootActivityId = default;
+            string message = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("goalId"u8))
@@ -78,7 +78,21 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new GoalRefreshHistory(Optional.ToNullable(goalId), Optional.ToNullable(connectionType), Optional.ToNullable(status), Optional.ToNullable(timestamp), Optional.ToNullable(rootActivityId), message.Value);
+            return new GoalRefreshHistory(
+                goalId,
+                connectionType,
+                status,
+                timestamp,
+                rootActivityId,
+                message);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static GoalRefreshHistory FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeGoalRefreshHistory(document.RootElement);
         }
     }
 }

@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -22,8 +22,8 @@ namespace Microsoft.PowerBI.Api.Models
             string displayName = default;
             ArtifactType artifactType = default;
             string accessRight = default;
-            Optional<string> shareType = default;
-            Optional<User> sharer = default;
+            string shareType = default;
+            User sharer = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("artifactId"u8))
@@ -61,7 +61,21 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new ArtifactAccessEntry(artifactId, displayName, artifactType, accessRight, shareType.Value, sharer.Value);
+            return new ArtifactAccessEntry(
+                artifactId,
+                displayName,
+                artifactType,
+                accessRight,
+                shareType,
+                sharer);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static ArtifactAccessEntry FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeArtifactAccessEntry(document.RootElement);
         }
     }
 }

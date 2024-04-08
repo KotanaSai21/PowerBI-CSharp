@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -55,11 +56,11 @@ namespace Microsoft.PowerBI.Api.Models
             }
             string name = default;
             string dataType = default;
-            Optional<string> formatString = default;
-            Optional<string> sortByColumn = default;
-            Optional<string> dataCategory = default;
-            Optional<bool> isHidden = default;
-            Optional<string> summarizeBy = default;
+            string formatString = default;
+            string sortByColumn = default;
+            string dataCategory = default;
+            bool? isHidden = default;
+            string summarizeBy = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("name"u8))
@@ -102,7 +103,30 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Column(name, dataType, formatString.Value, sortByColumn.Value, dataCategory.Value, Optional.ToNullable(isHidden), summarizeBy.Value);
+            return new Column(
+                name,
+                dataType,
+                formatString,
+                sortByColumn,
+                dataCategory,
+                isHidden,
+                summarizeBy);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Column FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeColumn(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Column>(this);
+            return content;
         }
     }
 }

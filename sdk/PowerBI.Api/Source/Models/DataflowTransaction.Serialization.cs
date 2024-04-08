@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,10 +19,10 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             string id = default;
-            Optional<string> refreshType = default;
-            Optional<string> startTime = default;
-            Optional<string> endTime = default;
-            Optional<string> status = default;
+            string refreshType = default;
+            string startTime = default;
+            string endTime = default;
+            string status = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -51,7 +51,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DataflowTransaction(id, refreshType.Value, startTime.Value, endTime.Value, status.Value);
+            return new DataflowTransaction(id, refreshType, startTime, endTime, status);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DataflowTransaction FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDataflowTransaction(document.RootElement);
         }
     }
 }

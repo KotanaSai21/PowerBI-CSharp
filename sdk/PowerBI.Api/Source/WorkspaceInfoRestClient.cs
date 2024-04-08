@@ -69,7 +69,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requiredWorkspaces);
+            content.JsonWriter.WriteObjectValue<RequiredWorkspaces>(requiredWorkspaces);
             request.Content = content;
             return message;
         }

@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -32,7 +33,7 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             string name = default;
-            Optional<string> filterExpression = default;
+            string filterExpression = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("name"u8))
@@ -46,7 +47,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new RoleTablePermission(name, filterExpression.Value);
+            return new RoleTablePermission(name, filterExpression);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static RoleTablePermission FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeRoleTablePermission(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<RoleTablePermission>(this);
+            return content;
         }
     }
 }

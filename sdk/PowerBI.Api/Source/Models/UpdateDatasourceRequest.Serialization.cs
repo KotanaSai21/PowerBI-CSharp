@@ -16,8 +16,16 @@ namespace Microsoft.PowerBI.Api.Models
         {
             writer.WriteStartObject();
             writer.WritePropertyName("credentialDetails"u8);
-            writer.WriteObjectValue(CredentialDetails);
+            writer.WriteObjectValue<CredentialDetails>(CredentialDetails);
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<UpdateDatasourceRequest>(this);
+            return content;
         }
     }
 }

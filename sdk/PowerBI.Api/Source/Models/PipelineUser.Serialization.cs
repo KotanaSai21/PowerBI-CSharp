@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -33,7 +34,7 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<PipelineUserAccessRight> accessRight = default;
+            PipelineUserAccessRight? accessRight = default;
             string identifier = default;
             PrincipalType principalType = default;
             foreach (var property in element.EnumerateObject())
@@ -58,7 +59,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new PipelineUser(identifier, principalType, Optional.ToNullable(accessRight));
+            return new PipelineUser(identifier, principalType, accessRight);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new PipelineUser FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePipelineUser(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<PipelineUser>(this);
+            return content;
         }
     }
 }

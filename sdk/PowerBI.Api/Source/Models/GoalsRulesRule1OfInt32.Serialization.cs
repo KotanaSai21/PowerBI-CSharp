@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -22,7 +23,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Conditions)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<GoalsRulesRuleCondition>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -40,8 +41,8 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IList<GoalsRulesRuleCondition>> conditions = default;
-            Optional<int> output = default;
+            IList<GoalsRulesRuleCondition> conditions = default;
+            int? output = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("conditions"u8))
@@ -68,7 +69,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new GoalsRulesRule1OfInt32(Optional.ToList(conditions), Optional.ToNullable(output));
+            return new GoalsRulesRule1OfInt32(conditions ?? new ChangeTrackingList<GoalsRulesRuleCondition>(), output);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static GoalsRulesRule1OfInt32 FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeGoalsRulesRule1OfInt32(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<GoalsRulesRule1OfInt32>(this);
+            return content;
         }
     }
 }

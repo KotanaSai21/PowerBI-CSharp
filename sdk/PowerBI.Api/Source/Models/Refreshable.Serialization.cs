@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,21 +20,21 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> id = default;
-            Optional<string> name = default;
-            Optional<RefreshableKind> kind = default;
-            Optional<DateTimeOffset> startTime = default;
-            Optional<DateTimeOffset> endTime = default;
-            Optional<int> refreshCount = default;
-            Optional<int> refreshFailures = default;
-            Optional<float> averageDuration = default;
-            Optional<float> medianDuration = default;
-            Optional<int> refreshesPerDay = default;
-            Optional<Refresh> lastRefresh = default;
-            Optional<RefreshSchedule> refreshSchedule = default;
-            Optional<IReadOnlyList<string>> configuredBy = default;
-            Optional<Capacity> capacity = default;
-            Optional<RefreshableGroup> group = default;
+            string id = default;
+            string name = default;
+            RefreshableKind? kind = default;
+            DateTimeOffset? startTime = default;
+            DateTimeOffset? endTime = default;
+            int? refreshCount = default;
+            int? refreshFailures = default;
+            float? averageDuration = default;
+            float? medianDuration = default;
+            int? refreshesPerDay = default;
+            Refresh lastRefresh = default;
+            RefreshSchedule refreshSchedule = default;
+            IReadOnlyList<string> configuredBy = default;
+            Capacity capacity = default;
+            RefreshableGroup group = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -170,7 +170,30 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Refreshable(id.Value, name.Value, Optional.ToNullable(kind), Optional.ToNullable(startTime), Optional.ToNullable(endTime), Optional.ToNullable(refreshCount), Optional.ToNullable(refreshFailures), Optional.ToNullable(averageDuration), Optional.ToNullable(medianDuration), Optional.ToNullable(refreshesPerDay), lastRefresh.Value, refreshSchedule.Value, Optional.ToList(configuredBy), capacity.Value, group.Value);
+            return new Refreshable(
+                id,
+                name,
+                kind,
+                startTime,
+                endTime,
+                refreshCount,
+                refreshFailures,
+                averageDuration,
+                medianDuration,
+                refreshesPerDay,
+                lastRefresh,
+                refreshSchedule,
+                configuredBy ?? new ChangeTrackingList<string>(),
+                capacity,
+                group);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Refreshable FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeRefreshable(document.RootElement);
         }
     }
 }

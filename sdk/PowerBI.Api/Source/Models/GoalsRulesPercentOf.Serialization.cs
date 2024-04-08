@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -34,8 +35,8 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> field = default;
-            Optional<double> percent = default;
+            string field = default;
+            double? percent = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("field"u8))
@@ -53,7 +54,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new GoalsRulesPercentOf(field.Value, Optional.ToNullable(percent));
+            return new GoalsRulesPercentOf(field, percent);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static GoalsRulesPercentOf FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeGoalsRulesPercentOf(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<GoalsRulesPercentOf>(this);
+            return content;
         }
     }
 }

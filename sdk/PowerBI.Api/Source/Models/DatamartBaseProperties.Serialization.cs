@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,12 +20,12 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid id = default;
-            Optional<string> name = default;
-            Optional<string> description = default;
-            Optional<DatamartType> type = default;
-            Optional<DatamartStatus> status = default;
-            Optional<DatamartState> state = default;
-            Optional<string> suspendedBatchId = default;
+            string name = default;
+            string description = default;
+            DatamartType? type = default;
+            DatamartStatus? status = default;
+            DatamartState? state = default;
+            string suspendedBatchId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -76,7 +76,22 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatamartBaseProperties(id, name.Value, description.Value, Optional.ToNullable(type), Optional.ToNullable(status), Optional.ToNullable(state), suspendedBatchId.Value);
+            return new DatamartBaseProperties(
+                id,
+                name,
+                description,
+                type,
+                status,
+                state,
+                suspendedBatchId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatamartBaseProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatamartBaseProperties(document.RootElement);
         }
     }
 }

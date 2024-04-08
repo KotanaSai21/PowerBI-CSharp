@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -38,7 +39,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<GroupUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -48,7 +49,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Reports)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<AdminReport>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -58,7 +59,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Dashboards)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<AdminDashboard>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -68,7 +69,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Datasets)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<AdminDataset>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -78,7 +79,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Dataflows)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<AdminDataflow>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -88,7 +89,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Workbooks)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Workbook>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -111,17 +112,17 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> description = default;
-            Optional<GroupType> type = default;
-            Optional<string> state = default;
-            Optional<IList<GroupUser>> users = default;
-            Optional<IList<AdminReport>> reports = default;
-            Optional<IList<AdminDashboard>> dashboards = default;
-            Optional<IList<AdminDataset>> datasets = default;
-            Optional<IList<AdminDataflow>> dataflows = default;
-            Optional<IList<Workbook>> workbooks = default;
-            Optional<Guid> pipelineId = default;
-            Optional<bool> hasWorkspaceLevelSettings = default;
+            string description = default;
+            GroupType? type = default;
+            string state = default;
+            IList<GroupUser> users = default;
+            IList<AdminReport> reports = default;
+            IList<AdminDashboard> dashboards = default;
+            IList<AdminDataset> datasets = default;
+            IList<AdminDataflow> dataflows = default;
+            IList<Workbook> workbooks = default;
+            Guid? pipelineId = default;
+            bool? hasWorkspaceLevelSettings = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("description"u8))
@@ -246,7 +247,34 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new GroupAdminProperties(description.Value, Optional.ToNullable(type), state.Value, Optional.ToList(users), Optional.ToList(reports), Optional.ToList(dashboards), Optional.ToList(datasets), Optional.ToList(dataflows), Optional.ToList(workbooks), Optional.ToNullable(pipelineId), Optional.ToNullable(hasWorkspaceLevelSettings));
+            return new GroupAdminProperties(
+                description,
+                type,
+                state,
+                users ?? new ChangeTrackingList<GroupUser>(),
+                reports ?? new ChangeTrackingList<AdminReport>(),
+                dashboards ?? new ChangeTrackingList<AdminDashboard>(),
+                datasets ?? new ChangeTrackingList<AdminDataset>(),
+                dataflows ?? new ChangeTrackingList<AdminDataflow>(),
+                workbooks ?? new ChangeTrackingList<Workbook>(),
+                pipelineId,
+                hasWorkspaceLevelSettings);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static GroupAdminProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeGroupAdminProperties(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<GroupAdminProperties>(this);
+            return content;
         }
     }
 }

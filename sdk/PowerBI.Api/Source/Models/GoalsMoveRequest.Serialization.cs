@@ -16,23 +16,31 @@ namespace Microsoft.PowerBI.Api.Models
         {
             writer.WriteStartObject();
             writer.WritePropertyName("goalToMove"u8);
-            writer.WriteObjectValue(GoalToMove);
+            writer.WriteObjectValue<GoalRankValidationInfo>(GoalToMove);
             if (Optional.IsDefined(NewParent))
             {
                 writer.WritePropertyName("newParent"u8);
-                writer.WriteObjectValue(NewParent);
+                writer.WriteObjectValue<GoalRankValidationInfo>(NewParent);
             }
             if (Optional.IsDefined(NewPrevious))
             {
                 writer.WritePropertyName("newPrevious"u8);
-                writer.WriteObjectValue(NewPrevious);
+                writer.WriteObjectValue<GoalRankValidationInfo>(NewPrevious);
             }
             if (Optional.IsDefined(NewNext))
             {
                 writer.WritePropertyName("newNext"u8);
-                writer.WriteObjectValue(NewNext);
+                writer.WriteObjectValue<GoalRankValidationInfo>(NewNext);
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<GoalsMoveRequest>(this);
+            return content;
         }
     }
 }

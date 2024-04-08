@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,9 +19,9 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IReadOnlyList<WorkspaceInfo>> workspaces = default;
-            Optional<IReadOnlyList<Datasource>> datasourceInstances = default;
-            Optional<IReadOnlyList<Datasource>> misconfiguredDatasourceInstances = default;
+            IReadOnlyList<WorkspaceInfo> workspaces = default;
+            IReadOnlyList<Datasource> datasourceInstances = default;
+            IReadOnlyList<Datasource> misconfiguredDatasourceInstances = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("workspaces"u8))
@@ -67,7 +67,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new WorkspaceInfoResponse(Optional.ToList(workspaces), Optional.ToList(datasourceInstances), Optional.ToList(misconfiguredDatasourceInstances));
+            return new WorkspaceInfoResponse(workspaces ?? new ChangeTrackingList<WorkspaceInfo>(), datasourceInstances ?? new ChangeTrackingList<Datasource>(), misconfiguredDatasourceInstances ?? new ChangeTrackingList<Datasource>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static WorkspaceInfoResponse FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorkspaceInfoResponse(document.RootElement);
         }
     }
 }

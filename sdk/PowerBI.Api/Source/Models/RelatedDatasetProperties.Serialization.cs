@@ -7,6 +7,7 @@
 
 using System;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -30,7 +31,7 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<Guid> datasetWorkspaceId = default;
+            Guid? datasetWorkspaceId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("datasetWorkspaceId"u8))
@@ -43,7 +44,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new RelatedDatasetProperties(Optional.ToNullable(datasetWorkspaceId));
+            return new RelatedDatasetProperties(datasetWorkspaceId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static RelatedDatasetProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeRelatedDatasetProperties(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<RelatedDatasetProperties>(this);
+            return content;
         }
     }
 }

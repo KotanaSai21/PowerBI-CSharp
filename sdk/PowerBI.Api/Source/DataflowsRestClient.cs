@@ -196,7 +196,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(dataflowUpdateRequest);
+            content.JsonWriter.WriteObjectValue<DataflowUpdateRequestMessage>(dataflowUpdateRequest);
             request.Content = content;
             return message;
         }
@@ -282,7 +282,7 @@ namespace Microsoft.PowerBI.Api
             {
                 request.Headers.Add("Content-Type", "application/json");
                 var content = new Utf8JsonRequestContent();
-                content.JsonWriter.WriteObjectValue(refreshRequest);
+                content.JsonWriter.WriteObjectValue<RefreshRequest>(refreshRequest);
                 request.Content = content;
             }
             return message;
@@ -604,7 +604,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(refreshScheduleRequest);
+            content.JsonWriter.WriteObjectValue<RefreshScheduleRequest>(refreshScheduleRequest);
             request.Content = content;
             return message;
         }

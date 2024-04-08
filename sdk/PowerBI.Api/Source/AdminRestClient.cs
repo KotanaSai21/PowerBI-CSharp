@@ -48,7 +48,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(tenantKeyCreationRequest);
+            content.JsonWriter.WriteObjectValue<TenantKeyCreationRequest>(tenantKeyCreationRequest);
             request.Content = content;
             return message;
         }
@@ -232,7 +232,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(tenantKeyRotationRequest);
+            content.JsonWriter.WriteObjectValue<TenantKeyRotationRequest>(tenantKeyRotationRequest);
             request.Content = content;
             return message;
         }
@@ -422,7 +422,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(capacityPatchRequest);
+            content.JsonWriter.WriteObjectValue<CapacityPatchRequest>(capacityPatchRequest);
             request.Content = content;
             return message;
         }

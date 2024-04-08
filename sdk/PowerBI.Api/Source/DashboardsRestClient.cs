@@ -117,7 +117,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<AddDashboardRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -494,7 +494,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<CloneTileRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -672,7 +672,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<AddDashboardRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -1109,7 +1109,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<CloneTileRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -1222,7 +1222,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<GenerateTokenRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -1485,7 +1485,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// Maximum 200 requests per hour.
+        /// Maximum 50 requests per hour or 5 requests per minute, per tenant.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public async Task<Response<AdminDashboards>> GetDashboardsAsAdminAsync(string expand = null, string filter = null, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
@@ -1528,7 +1528,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// Maximum 200 requests per hour.
+        /// Maximum 50 requests per hour or 5 requests per minute, per tenant.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public Response<AdminDashboards> GetDashboardsAsAdmin(string expand = null, string filter = null, int? top = null, int? skip = null, CancellationToken cancellationToken = default)

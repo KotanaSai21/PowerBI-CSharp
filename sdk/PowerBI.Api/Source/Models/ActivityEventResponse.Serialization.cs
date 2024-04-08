@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,9 +19,9 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IReadOnlyList<object>> activityEventEntities = default;
-            Optional<string> continuationUri = default;
-            Optional<string> continuationToken = default;
+            IReadOnlyList<object> activityEventEntities = default;
+            string continuationUri = default;
+            string continuationToken = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("activityEventEntities"u8))
@@ -56,7 +56,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new ActivityEventResponse(Optional.ToList(activityEventEntities), continuationUri.Value, continuationToken.Value);
+            return new ActivityEventResponse(activityEventEntities ?? new ChangeTrackingList<object>(), continuationUri, continuationToken);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static ActivityEventResponse FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeActivityEventResponse(document.RootElement);
         }
     }
 }

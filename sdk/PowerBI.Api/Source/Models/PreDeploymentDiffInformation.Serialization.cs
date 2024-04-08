@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -39,6 +40,14 @@ namespace Microsoft.PowerBI.Api.Models
                 }
             }
             return new PreDeploymentDiffInformation(newArtifactsCount, differentArtifactsCount, noDifferenceArtifactsCount);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static PreDeploymentDiffInformation FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePreDeploymentDiffInformation(document.RootElement);
         }
     }
 }

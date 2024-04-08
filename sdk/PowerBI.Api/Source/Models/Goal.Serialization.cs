@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -85,7 +86,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(StatusRules))
             {
                 writer.WritePropertyName("statusRules"u8);
-                writer.WriteObjectValue(StatusRules);
+                writer.WriteObjectValue<GoalsRulesGoalRulesContainer>(StatusRules);
             }
             if (Optional.IsDefined(Permissions))
             {
@@ -108,7 +109,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in GoalValues)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<GoalValue>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -118,7 +119,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Aggregations)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<GoalAggregation>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -131,25 +132,25 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<Guid> id = default;
-            Optional<string> name = default;
-            Optional<Guid> scorecardId = default;
-            Optional<DateTimeOffset> createdTime = default;
-            Optional<DateTimeOffset> lastModifiedTime = default;
-            Optional<DateTimeOffset> startDate = default;
-            Optional<DateTimeOffset> completionDate = default;
-            Optional<Guid> parentId = default;
-            Optional<int> notesCount = default;
-            Optional<string> valuesFormatString = default;
-            Optional<string> datesFormatString = default;
-            Optional<string> description = default;
-            Optional<bool> hasStatusRules = default;
-            Optional<GoalsRulesGoalRulesContainer> statusRules = default;
-            Optional<GoalPermissions> permissions = default;
-            Optional<int> level = default;
-            Optional<long> rank = default;
-            Optional<IList<GoalValue>> goalValues = default;
-            Optional<IList<GoalAggregation>> aggregations = default;
+            Guid? id = default;
+            string name = default;
+            Guid? scorecardId = default;
+            DateTimeOffset? createdTime = default;
+            DateTimeOffset? lastModifiedTime = default;
+            DateTimeOffset? startDate = default;
+            DateTimeOffset? completionDate = default;
+            Guid? parentId = default;
+            int? notesCount = default;
+            string valuesFormatString = default;
+            string datesFormatString = default;
+            string description = default;
+            bool? hasStatusRules = default;
+            GoalsRulesGoalRulesContainer statusRules = default;
+            GoalPermissions? permissions = default;
+            int? level = default;
+            long? rank = default;
+            IList<GoalValue> goalValues = default;
+            IList<GoalAggregation> aggregations = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -318,7 +319,42 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Goal(Optional.ToNullable(id), name.Value, Optional.ToNullable(scorecardId), Optional.ToNullable(createdTime), Optional.ToNullable(lastModifiedTime), Optional.ToNullable(startDate), Optional.ToNullable(completionDate), Optional.ToNullable(parentId), Optional.ToNullable(notesCount), valuesFormatString.Value, datesFormatString.Value, description.Value, Optional.ToNullable(hasStatusRules), statusRules.Value, Optional.ToNullable(permissions), Optional.ToNullable(level), Optional.ToNullable(rank), Optional.ToList(goalValues), Optional.ToList(aggregations));
+            return new Goal(
+                id,
+                name,
+                scorecardId,
+                createdTime,
+                lastModifiedTime,
+                startDate,
+                completionDate,
+                parentId,
+                notesCount,
+                valuesFormatString,
+                datesFormatString,
+                description,
+                hasStatusRules,
+                statusRules,
+                permissions,
+                level,
+                rank,
+                goalValues ?? new ChangeTrackingList<GoalValue>(),
+                aggregations ?? new ChangeTrackingList<GoalAggregation>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Goal FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeGoal(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Goal>(this);
+            return content;
         }
     }
 }

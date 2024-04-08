@@ -151,7 +151,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<GroupCreationRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -393,7 +393,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(groupProperties);
+            content.JsonWriter.WriteObjectValue<UpdateGroupRequest>(groupProperties);
             request.Content = content;
             return message;
         }
@@ -586,7 +586,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(userDetails);
+            content.JsonWriter.WriteObjectValue<GroupUser>(userDetails);
             request.Content = content;
             return message;
         }
@@ -678,7 +678,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(userDetails);
+            content.JsonWriter.WriteObjectValue<GroupUser>(userDetails);
             request.Content = content;
             return message;
         }
@@ -855,7 +855,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<AssignToCapacityRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -941,7 +941,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<AssignToCapacityRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -1175,7 +1175,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<AssignToDataflowStorageRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -1294,7 +1294,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// Maximum 50 requests per hour, per tenant. This call will also time out after 30 seconds to prevent adverse effect on the Power BI service.
+        /// Maximum 50 requests per hour or 15 requests per minute, per tenant. This call will also time out after 30 seconds to prevent adverse effect on the Power BI service.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public async Task<Response<AdminGroups>> GetGroupsAsAdminAsync(int top, string expand = null, string filter = null, int? skip = null, CancellationToken cancellationToken = default)
@@ -1337,7 +1337,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// Maximum 50 requests per hour, per tenant. This call will also time out after 30 seconds to prevent adverse effect on the Power BI service.
+        /// Maximum 50 requests per hour or 15 requests per minute, per tenant. This call will also time out after 30 seconds to prevent adverse effect on the Power BI service.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public Response<AdminGroups> GetGroupsAsAdmin(int top, string expand = null, string filter = null, int? skip = null, CancellationToken cancellationToken = default)
@@ -1462,7 +1462,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(groupProperties);
+            content.JsonWriter.WriteObjectValue<AdminGroup>(groupProperties);
             request.Content = content;
             return message;
         }
@@ -1659,7 +1659,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(userDetails);
+            content.JsonWriter.WriteObjectValue<GroupUser>(userDetails);
             request.Content = content;
             return message;
         }
@@ -1860,7 +1860,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(groupRestoreRequest);
+            content.JsonWriter.WriteObjectValue<GroupRestoreRequest>(groupRestoreRequest);
             request.Content = content;
             return message;
         }

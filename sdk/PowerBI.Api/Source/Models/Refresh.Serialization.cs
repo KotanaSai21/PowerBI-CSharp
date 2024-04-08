@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,13 +20,13 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<RefreshType> refreshType = default;
-            Optional<DateTimeOffset> startTime = default;
-            Optional<DateTimeOffset> endTime = default;
-            Optional<string> serviceExceptionJson = default;
-            Optional<string> status = default;
-            Optional<string> requestId = default;
-            Optional<IReadOnlyList<RefreshAttempt>> refreshAttempts = default;
+            RefreshType? refreshType = default;
+            DateTimeOffset? startTime = default;
+            DateTimeOffset? endTime = default;
+            string serviceExceptionJson = default;
+            string status = default;
+            string requestId = default;
+            IReadOnlyList<RefreshAttempt> refreshAttempts = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("refreshType"u8))
@@ -86,7 +86,22 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Refresh(Optional.ToNullable(refreshType), Optional.ToNullable(startTime), Optional.ToNullable(endTime), serviceExceptionJson.Value, status.Value, requestId.Value, Optional.ToList(refreshAttempts));
+            return new Refresh(
+                refreshType,
+                startTime,
+                endTime,
+                serviceExceptionJson,
+                status,
+                requestId,
+                refreshAttempts ?? new ChangeTrackingList<RefreshAttempt>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Refresh FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeRefresh(document.RootElement);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Datasets)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DeployArtifactRequest>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -31,7 +31,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Reports)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DeployArtifactRequest>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -41,7 +41,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Dashboards)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DeployArtifactRequest>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -51,7 +51,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Dataflows)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DeployArtifactRequest>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -61,7 +61,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Datamarts)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DeployArtifactRequest>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -75,17 +75,17 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(NewWorkspace))
             {
                 writer.WritePropertyName("newWorkspace"u8);
-                writer.WriteObjectValue(NewWorkspace);
+                writer.WriteObjectValue<PipelineNewWorkspaceRequest>(NewWorkspace);
             }
             if (Optional.IsDefined(UpdateAppSettings))
             {
                 writer.WritePropertyName("updateAppSettings"u8);
-                writer.WriteObjectValue(UpdateAppSettings);
+                writer.WriteObjectValue<PipelineUpdateAppSettings>(UpdateAppSettings);
             }
             if (Optional.IsDefined(Options))
             {
                 writer.WritePropertyName("options"u8);
-                writer.WriteObjectValue(Options);
+                writer.WriteObjectValue<DeploymentOptions>(Options);
             }
             if (Optional.IsDefined(Note))
             {
@@ -93,6 +93,14 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStringValue(Note);
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<SelectiveDeployRequest>(this);
+            return content;
         }
     }
 }

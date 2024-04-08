@@ -4,10 +4,11 @@
     <TargetFrameworks>netstandard2.0;net48</TargetFrameworks>
     <ProjectGuid>{1EE969AD-7923-4855-AACA-2A1B790BB0F1}</ProjectGuid>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <Nullable>annotations</Nullable>
-    <LangVersion>11.0</LangVersion>
+     <LangVersion>11.0</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Nullable>annotations</Nullable>
     <IncludeGeneratorSharedCode>true</IncludeGeneratorSharedCode>
+    <RestoreAdditionalProjectSources>https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json</RestoreAdditionalProjectSources>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
@@ -62,7 +63,6 @@
   <!--Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"-->  
   <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.21" />
   </ItemGroup>  
  <ItemGroup>
     <Folder Include="Properties\" />
@@ -103,9 +103,10 @@
       <Link>PipelineAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Azure.Core" Version="1.37.0" />
-  </ItemGroup>  
+<ItemGroup>
+    <PackageReference Include="Azure.Core" Version="1.38.0" />
+    <PackageReference Include="Microsoft.Azure.AutoRest.CSharp" Version="3.0.0-beta.20240325.4" PrivateAssets="All" />
+  </ItemGroup>
 
   <PropertyGroup Condition=" '$(CdpxPostSigning)' == 'true' ">
     <IsCleaning>false</IsCleaning>

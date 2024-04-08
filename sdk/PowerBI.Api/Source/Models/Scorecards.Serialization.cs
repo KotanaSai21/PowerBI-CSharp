@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,10 +19,10 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> odataContext = default;
-            Optional<int> odataCount = default;
-            Optional<string> odataNextLink = default;
-            Optional<IReadOnlyList<Scorecard>> value = default;
+            string odataContext = default;
+            int? odataCount = default;
+            string odataNextLink = default;
+            IReadOnlyList<Scorecard> value = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("@odata.context"u8))
@@ -59,7 +59,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Scorecards(odataContext.Value, Optional.ToNullable(odataCount), odataNextLink.Value, Optional.ToList(value));
+            return new Scorecards(odataContext, odataCount, odataNextLink, value ?? new ChangeTrackingList<Scorecard>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Scorecards FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeScorecards(document.RootElement);
         }
     }
 }

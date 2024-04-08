@@ -21,7 +21,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Dashboards)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<ArtifactId>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -31,7 +31,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Reports)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<ArtifactId>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -41,7 +41,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Datasets)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<ArtifactStringId>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -51,11 +51,19 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Dataflows)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<ArtifactId>(item);
                 }
                 writer.WriteEndArray();
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<InformationProtectionArtifactsChangeLabel>(this);
+            return content;
         }
     }
 }

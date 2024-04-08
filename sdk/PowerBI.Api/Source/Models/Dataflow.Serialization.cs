@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -55,7 +56,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DataflowUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -69,13 +70,13 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid objectId = default;
-            Optional<string> name = default;
-            Optional<string> description = default;
-            Optional<string> modelUrl = default;
-            Optional<string> configuredBy = default;
-            Optional<string> modifiedBy = default;
-            Optional<DateTimeOffset> modifiedDateTime = default;
-            Optional<IList<DataflowUser>> users = default;
+            string name = default;
+            string description = default;
+            string modelUrl = default;
+            string configuredBy = default;
+            string modifiedBy = default;
+            DateTimeOffset? modifiedDateTime = default;
+            IList<DataflowUser> users = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("objectId"u8))
@@ -132,7 +133,31 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Dataflow(objectId, name.Value, description.Value, modelUrl.Value, configuredBy.Value, modifiedBy.Value, Optional.ToNullable(modifiedDateTime), Optional.ToList(users));
+            return new Dataflow(
+                objectId,
+                name,
+                description,
+                modelUrl,
+                configuredBy,
+                modifiedBy,
+                modifiedDateTime,
+                users ?? new ChangeTrackingList<DataflowUser>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new Dataflow FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDataflow(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Dataflow>(this);
+            return content;
         }
     }
 }

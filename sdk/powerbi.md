@@ -12,7 +12,9 @@ csharp: true
 output-folder: PowerBI.Api\Source
 clear-output-folder: true
 override-client-name: PowerBIClient
+skip-csproj: true
+public-clients: true
 generation1-convenience-client: true
-add-credentials: true
-model-name: PowerBIClient 
+security: AADToken
+security-scopes: https://analysis.windows.net/powerbi/api/.default
 ```

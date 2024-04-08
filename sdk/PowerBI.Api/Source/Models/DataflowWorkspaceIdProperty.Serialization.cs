@@ -7,6 +7,7 @@
 
 using System;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -30,7 +31,7 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<Guid> workspaceId = default;
+            Guid? workspaceId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("workspaceId"u8))
@@ -43,7 +44,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DataflowWorkspaceIdProperty(Optional.ToNullable(workspaceId));
+            return new DataflowWorkspaceIdProperty(workspaceId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DataflowWorkspaceIdProperty FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDataflowWorkspaceIdProperty(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DataflowWorkspaceIdProperty>(this);
+            return content;
         }
     }
 }

@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -39,9 +40,9 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> createReportEmbedURL = default;
-            Optional<string> qnaEmbedURL = default;
-            Optional<string> webUrl = default;
+            string createReportEmbedURL = default;
+            string qnaEmbedURL = default;
+            string webUrl = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("CreateReportEmbedURL"u8))
@@ -60,7 +61,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasetNavigationProperties(createReportEmbedURL.Value, qnaEmbedURL.Value, webUrl.Value);
+            return new DatasetNavigationProperties(createReportEmbedURL, qnaEmbedURL, webUrl);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasetNavigationProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasetNavigationProperties(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DatasetNavigationProperties>(this);
+            return content;
         }
     }
 }

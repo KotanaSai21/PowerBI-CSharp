@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -22,7 +23,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Tables)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Table>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -42,7 +43,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Expressions)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Expression>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -52,7 +53,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Roles)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Role>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -65,11 +66,11 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IList<Table>> tables = default;
-            Optional<string> schemaRetrievalError = default;
-            Optional<bool> schemaMayNotBeUpToDate = default;
-            Optional<IList<Expression>> expressions = default;
-            Optional<IList<Role>> roles = default;
+            IList<Table> tables = default;
+            string schemaRetrievalError = default;
+            bool? schemaMayNotBeUpToDate = default;
+            IList<Expression> expressions = default;
+            IList<Role> roles = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("tables"u8))
@@ -129,7 +130,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasetSchemaProperties(Optional.ToList(tables), schemaRetrievalError.Value, Optional.ToNullable(schemaMayNotBeUpToDate), Optional.ToList(expressions), Optional.ToList(roles));
+            return new DatasetSchemaProperties(tables ?? new ChangeTrackingList<Table>(), schemaRetrievalError, schemaMayNotBeUpToDate, expressions ?? new ChangeTrackingList<Expression>(), roles ?? new ChangeTrackingList<Role>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasetSchemaProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasetSchemaProperties(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DatasetSchemaProperties>(this);
+            return content;
         }
     }
 }

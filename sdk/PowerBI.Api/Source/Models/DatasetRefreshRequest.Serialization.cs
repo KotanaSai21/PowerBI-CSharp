@@ -43,7 +43,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Objects)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DatasetRefreshObjects>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -58,6 +58,14 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStringValue(EffectiveDate.Value, "O");
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DatasetRefreshRequest>(this);
+            return content;
         }
     }
 }

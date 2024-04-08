@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -18,9 +18,9 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> name = default;
-            Optional<string> displayName = default;
-            Optional<int> order = default;
+            string name = default;
+            string displayName = default;
+            int? order = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("name"u8))
@@ -43,7 +43,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Page(name.Value, displayName.Value, Optional.ToNullable(order));
+            return new Page(name, displayName, order);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Page FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePage(document.RootElement);
         }
     }
 }

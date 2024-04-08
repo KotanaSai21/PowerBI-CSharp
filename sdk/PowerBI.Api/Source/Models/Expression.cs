@@ -6,7 +6,6 @@
 #nullable disable
 
 using System;
-using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -14,28 +13,28 @@ namespace Microsoft.PowerBI.Api.Models
     public partial class Expression
     {
         /// <summary> Initializes a new instance of <see cref="Expression"/>. </summary>
-        /// <param name="expressionValue"> A dataset table source. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="expressionValue"/> is null. </exception>
-        public Expression(ASMashupExpression expressionValue)
+        /// <param name="expressionProperty"> A dataset table source. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="expressionProperty"/> is null. </exception>
+        public Expression(ASMashupExpression expressionProperty)
         {
-            Argument.AssertNotNull(expressionValue, nameof(expressionValue));
+            Argument.AssertNotNull(expressionProperty, nameof(expressionProperty));
 
-            ExpressionValue = expressionValue;
+            ExpressionProperty = expressionProperty;
         }
 
         /// <summary> Initializes a new instance of <see cref="Expression"/>. </summary>
-        /// <param name="expressionValue"> A dataset table source. </param>
+        /// <param name="expressionProperty"> A dataset table source. </param>
         /// <param name="name"> The expression name. </param>
         /// <param name="description"> The expression description. </param>
-        internal Expression(ASMashupExpression expressionValue, string name, string description)
+        internal Expression(ASMashupExpression expressionProperty, string name, string description)
         {
-            ExpressionValue = expressionValue;
+            ExpressionProperty = expressionProperty;
             Name = name;
             Description = description;
         }
 
         /// <summary> A dataset table source. </summary>
-        public ASMashupExpression ExpressionValue { get; set; }
+        public ASMashupExpression ExpressionProperty { get; set; }
         /// <summary> The expression name. </summary>
         public string Name { get; set; }
         /// <summary> The expression description. </summary>

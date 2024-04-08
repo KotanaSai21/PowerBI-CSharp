@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -18,8 +18,8 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> code = default;
-            Optional<string> message = default;
+            string code = default;
+            string message = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("code"u8))
@@ -33,7 +33,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasetExecuteQueriesError(code.Value, message.Value);
+            return new DatasetExecuteQueriesError(code, message);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasetExecuteQueriesError FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasetExecuteQueriesError(document.RootElement);
         }
     }
 }

@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -23,7 +24,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in DatasourceUsages)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DatasourceUsage>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -33,7 +34,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in MisconfiguredDatasourceUsages)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DatasourceUsage>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -43,7 +44,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in UpstreamDataflows)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DependentDataflow>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -53,19 +54,19 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in UpstreamDatamart)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DependentDatamarts>(item);
                 }
                 writer.WriteEndArray();
             }
             if (Optional.IsDefined(EndorsementDetails))
             {
                 writer.WritePropertyName("endorsementDetails"u8);
-                writer.WriteObjectValue(EndorsementDetails);
+                writer.WriteObjectValue<EndorsementDetails>(EndorsementDetails);
             }
             if (Optional.IsDefined(SensitivityLabel))
             {
                 writer.WritePropertyName("sensitivityLabel"u8);
-                writer.WriteObjectValue(SensitivityLabel);
+                writer.WriteObjectValue<SensitivityLabel>(SensitivityLabel);
             }
             writer.WritePropertyName("objectId"u8);
             writer.WriteStringValue(ObjectId);
@@ -105,7 +106,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DataflowUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -118,20 +119,20 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IList<DatasourceUsage>> datasourceUsages = default;
-            Optional<IList<DatasourceUsage>> misconfiguredDatasourceUsages = default;
-            Optional<IList<DependentDataflow>> upstreamDataflows = default;
-            Optional<IList<DependentDatamarts>> upstreamDatamart = default;
-            Optional<EndorsementDetails> endorsementDetails = default;
-            Optional<SensitivityLabel> sensitivityLabel = default;
+            IList<DatasourceUsage> datasourceUsages = default;
+            IList<DatasourceUsage> misconfiguredDatasourceUsages = default;
+            IList<DependentDataflow> upstreamDataflows = default;
+            IList<DependentDatamarts> upstreamDatamart = default;
+            EndorsementDetails endorsementDetails = default;
+            SensitivityLabel sensitivityLabel = default;
             Guid objectId = default;
-            Optional<string> name = default;
-            Optional<string> description = default;
-            Optional<string> modelUrl = default;
-            Optional<string> configuredBy = default;
-            Optional<string> modifiedBy = default;
-            Optional<DateTimeOffset> modifiedDateTime = default;
-            Optional<IList<DataflowUser>> users = default;
+            string name = default;
+            string description = default;
+            string modelUrl = default;
+            string configuredBy = default;
+            string modifiedBy = default;
+            DateTimeOffset? modifiedDateTime = default;
+            IList<DataflowUser> users = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("datasourceUsages"u8))
@@ -262,7 +263,37 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new WorkspaceInfoDataflow(objectId, name.Value, description.Value, modelUrl.Value, configuredBy.Value, modifiedBy.Value, Optional.ToNullable(modifiedDateTime), Optional.ToList(users), Optional.ToList(datasourceUsages), Optional.ToList(misconfiguredDatasourceUsages), Optional.ToList(upstreamDataflows), Optional.ToList(upstreamDatamart), endorsementDetails.Value, sensitivityLabel.Value);
+            return new WorkspaceInfoDataflow(
+                objectId,
+                name,
+                description,
+                modelUrl,
+                configuredBy,
+                modifiedBy,
+                modifiedDateTime,
+                users ?? new ChangeTrackingList<DataflowUser>(),
+                datasourceUsages ?? new ChangeTrackingList<DatasourceUsage>(),
+                misconfiguredDatasourceUsages ?? new ChangeTrackingList<DatasourceUsage>(),
+                upstreamDataflows ?? new ChangeTrackingList<DependentDataflow>(),
+                upstreamDatamart ?? new ChangeTrackingList<DependentDatamarts>(),
+                endorsementDetails,
+                sensitivityLabel);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new WorkspaceInfoDataflow FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorkspaceInfoDataflow(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<WorkspaceInfoDataflow>(this);
+            return content;
         }
     }
 }

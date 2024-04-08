@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,11 +20,11 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IReadOnlyList<GoalsRulesRule1OfInt32>> rules = default;
-            Optional<int> defaultOutput = default;
-            Optional<string> scorecardObjectId = default;
-            Optional<string> goalObjectId = default;
-            Optional<DateTimeOffset> lastModifiedTime = default;
+            IReadOnlyList<GoalsRulesRule1OfInt32> rules = default;
+            int? defaultOutput = default;
+            string scorecardObjectId = default;
+            string goalObjectId = default;
+            DateTimeOffset? lastModifiedTime = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("rules"u8))
@@ -70,7 +70,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new GoalsRulesGoalStatusRules(Optional.ToList(rules), Optional.ToNullable(defaultOutput), scorecardObjectId.Value, goalObjectId.Value, Optional.ToNullable(lastModifiedTime));
+            return new GoalsRulesGoalStatusRules(rules ?? new ChangeTrackingList<GoalsRulesRule1OfInt32>(), defaultOutput, scorecardObjectId, goalObjectId, lastModifiedTime);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static GoalsRulesGoalStatusRules FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeGoalsRulesGoalStatusRules(document.RootElement);
         }
     }
 }

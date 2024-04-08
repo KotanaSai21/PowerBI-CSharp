@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -40,7 +41,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(Profile))
             {
                 writer.WritePropertyName("profile"u8);
-                writer.WriteObjectValue(Profile);
+                writer.WriteObjectValue<ServicePrincipalProfile>(Profile);
             }
             writer.WriteEndObject();
         }
@@ -52,11 +53,11 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             DatasourceUserAccessRight datasourceAccessRight = default;
-            Optional<string> emailAddress = default;
-            Optional<string> displayName = default;
-            Optional<string> identifier = default;
-            Optional<PrincipalType> principalType = default;
-            Optional<ServicePrincipalProfile> profile = default;
+            string emailAddress = default;
+            string displayName = default;
+            string identifier = default;
+            PrincipalType? principalType = default;
+            ServicePrincipalProfile profile = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("datasourceAccessRight"u8))
@@ -98,7 +99,29 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasourceUser(datasourceAccessRight, emailAddress.Value, displayName.Value, identifier.Value, Optional.ToNullable(principalType), profile.Value);
+            return new DatasourceUser(
+                datasourceAccessRight,
+                emailAddress,
+                displayName,
+                identifier,
+                principalType,
+                profile);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasourceUser FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasourceUser(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DatasourceUser>(this);
+            return content;
         }
     }
 }

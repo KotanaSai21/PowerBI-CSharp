@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,10 +19,10 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> odataContext = default;
-            Optional<IReadOnlyList<Subscription>> subscriptionEntities = default;
-            Optional<string> continuationUri = default;
-            Optional<string> continuationToken = default;
+            string odataContext = default;
+            IReadOnlyList<Subscription> subscriptionEntities = default;
+            string continuationUri = default;
+            string continuationToken = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("odata.context"u8))
@@ -55,7 +55,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new SubscriptionsByUserResponse(odataContext.Value, Optional.ToList(subscriptionEntities), continuationUri.Value, continuationToken.Value);
+            return new SubscriptionsByUserResponse(odataContext, subscriptionEntities ?? new ChangeTrackingList<Subscription>(), continuationUri, continuationToken);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static SubscriptionsByUserResponse FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeSubscriptionsByUserResponse(document.RootElement);
         }
     }
 }

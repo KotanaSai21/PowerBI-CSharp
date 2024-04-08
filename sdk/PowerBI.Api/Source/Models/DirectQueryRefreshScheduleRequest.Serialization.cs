@@ -16,8 +16,16 @@ namespace Microsoft.PowerBI.Api.Models
         {
             writer.WriteStartObject();
             writer.WritePropertyName("value"u8);
-            writer.WriteObjectValue(Value);
+            writer.WriteObjectValue<DirectQueryRefreshSchedule>(Value);
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DirectQueryRefreshScheduleRequest>(this);
+            return content;
         }
     }
 }

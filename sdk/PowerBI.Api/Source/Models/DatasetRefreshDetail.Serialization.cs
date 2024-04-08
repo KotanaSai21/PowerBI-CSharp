@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,17 +20,17 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<DateTimeOffset> startTime = default;
-            Optional<DateTimeOffset> endTime = default;
-            Optional<DatasetRefreshDetailType> type = default;
-            Optional<DatasetRefreshDetailCommitMode> commitMode = default;
-            Optional<DatasetRefreshDetailStatus> status = default;
-            Optional<DatasetRefreshDetailExtendedStatus> extendedStatus = default;
-            Optional<DatasetRefreshDetailType> currentRefreshType = default;
-            Optional<int> numberOfAttempts = default;
-            Optional<IReadOnlyList<DatasetRefreshObjects>> objects = default;
-            Optional<IReadOnlyList<EngineMessage>> messages = default;
-            Optional<IReadOnlyList<RefreshAttempt>> refreshAttempts = default;
+            DateTimeOffset? startTime = default;
+            DateTimeOffset? endTime = default;
+            DatasetRefreshDetailType? type = default;
+            DatasetRefreshDetailCommitMode? commitMode = default;
+            DatasetRefreshDetailStatus? status = default;
+            DatasetRefreshDetailExtendedStatus? extendedStatus = default;
+            DatasetRefreshDetailType? currentRefreshType = default;
+            int? numberOfAttempts = default;
+            IReadOnlyList<DatasetRefreshObjects> objects = default;
+            IReadOnlyList<EngineMessage> messages = default;
+            IReadOnlyList<RefreshAttempt> refreshAttempts = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("startTime"u8))
@@ -148,7 +148,26 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasetRefreshDetail(Optional.ToNullable(startTime), Optional.ToNullable(endTime), Optional.ToNullable(type), Optional.ToNullable(commitMode), Optional.ToNullable(status), Optional.ToNullable(extendedStatus), Optional.ToNullable(currentRefreshType), Optional.ToNullable(numberOfAttempts), Optional.ToList(objects), Optional.ToList(messages), Optional.ToList(refreshAttempts));
+            return new DatasetRefreshDetail(
+                startTime,
+                endTime,
+                type,
+                commitMode,
+                status,
+                extendedStatus,
+                currentRefreshType,
+                numberOfAttempts,
+                objects ?? new ChangeTrackingList<DatasetRefreshObjects>(),
+                messages ?? new ChangeTrackingList<EngineMessage>(),
+                refreshAttempts ?? new ChangeTrackingList<RefreshAttempt>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasetRefreshDetail FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasetRefreshDetail(document.RootElement);
         }
     }
 }

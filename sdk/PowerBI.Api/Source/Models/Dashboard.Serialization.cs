@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -33,7 +34,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DashboardUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -43,7 +44,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Subscriptions)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Subscription>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -73,14 +74,14 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> webUrl = default;
-            Optional<string> embedUrl = default;
-            Optional<IList<DashboardUser>> users = default;
-            Optional<IList<Subscription>> subscriptions = default;
+            string webUrl = default;
+            string embedUrl = default;
+            IList<DashboardUser> users = default;
+            IList<Subscription> subscriptions = default;
             Guid id = default;
-            Optional<string> displayName = default;
-            Optional<bool> isReadOnly = default;
-            Optional<string> appId = default;
+            string displayName = default;
+            bool? isReadOnly = default;
+            string appId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("webUrl"u8))
@@ -146,7 +147,31 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Dashboard(id, displayName.Value, Optional.ToNullable(isReadOnly), appId.Value, webUrl.Value, embedUrl.Value, Optional.ToList(users), Optional.ToList(subscriptions));
+            return new Dashboard(
+                id,
+                displayName,
+                isReadOnly,
+                appId,
+                webUrl,
+                embedUrl,
+                users ?? new ChangeTrackingList<DashboardUser>(),
+                subscriptions ?? new ChangeTrackingList<Subscription>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new Dashboard FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDashboard(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Dashboard>(this);
+            return content;
         }
     }
 }

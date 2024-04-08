@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -21,20 +21,20 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid id = default;
-            Optional<string> name = default;
-            Optional<string> description = default;
-            Optional<string> type = default;
-            Optional<string> state = default;
-            Optional<string> dataRetrievalState = default;
-            Optional<bool> isOnDedicatedCapacity = default;
-            Optional<string> capacityId = default;
-            Optional<DefaultDatasetStorageFormat> defaultDatasetStorageFormat = default;
-            Optional<IReadOnlyList<WorkspaceInfoReport>> reports = default;
-            Optional<IReadOnlyList<WorkspaceInfoDashboard>> dashboards = default;
-            Optional<IReadOnlyList<WorkspaceInfoDataset>> datasets = default;
-            Optional<IReadOnlyList<WorkspaceInfoDataflow>> dataflows = default;
-            Optional<IReadOnlyList<WorkspaceInfoDatamart>> datamarts = default;
-            Optional<IReadOnlyList<GroupUser>> users = default;
+            string name = default;
+            string description = default;
+            string type = default;
+            string state = default;
+            string dataRetrievalState = default;
+            bool? isOnDedicatedCapacity = default;
+            string capacityId = default;
+            DefaultDatasetStorageFormat? defaultDatasetStorageFormat = default;
+            IReadOnlyList<WorkspaceInfoReport> reports = default;
+            IReadOnlyList<WorkspaceInfoDashboard> dashboards = default;
+            IReadOnlyList<WorkspaceInfoDataset> datasets = default;
+            IReadOnlyList<WorkspaceInfoDataflow> dataflows = default;
+            IReadOnlyList<WorkspaceInfoDatamart> datamarts = default;
+            IReadOnlyList<GroupUser> users = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -175,7 +175,30 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new WorkspaceInfo(id, name.Value, description.Value, type.Value, state.Value, dataRetrievalState.Value, Optional.ToNullable(isOnDedicatedCapacity), capacityId.Value, Optional.ToNullable(defaultDatasetStorageFormat), Optional.ToList(reports), Optional.ToList(dashboards), Optional.ToList(datasets), Optional.ToList(dataflows), Optional.ToList(datamarts), Optional.ToList(users));
+            return new WorkspaceInfo(
+                id,
+                name,
+                description,
+                type,
+                state,
+                dataRetrievalState,
+                isOnDedicatedCapacity,
+                capacityId,
+                defaultDatasetStorageFormat,
+                reports ?? new ChangeTrackingList<WorkspaceInfoReport>(),
+                dashboards ?? new ChangeTrackingList<WorkspaceInfoDashboard>(),
+                datasets ?? new ChangeTrackingList<WorkspaceInfoDataset>(),
+                dataflows ?? new ChangeTrackingList<WorkspaceInfoDataflow>(),
+                datamarts ?? new ChangeTrackingList<WorkspaceInfoDatamart>(),
+                users ?? new ChangeTrackingList<GroupUser>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static WorkspaceInfo FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorkspaceInfo(document.RootElement);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(Settings))
             {
                 writer.WritePropertyName("settings"u8);
-                writer.WriteObjectValue(Settings);
+                writer.WriteObjectValue<ExportReportSettings>(Settings);
             }
             if (Optional.IsDefined(DatasetToBind))
             {
@@ -28,7 +28,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(DefaultBookmark))
             {
                 writer.WritePropertyName("defaultBookmark"u8);
-                writer.WriteObjectValue(DefaultBookmark);
+                writer.WriteObjectValue<PageBookmark>(DefaultBookmark);
             }
             if (Optional.IsCollectionDefined(ReportLevelFilters))
             {
@@ -36,7 +36,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in ReportLevelFilters)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<ExportFilter>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -46,7 +46,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Pages)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<ExportReportPage>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -56,11 +56,19 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Identities)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<EffectiveIdentity>(item);
                 }
                 writer.WriteEndArray();
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<PowerBIReportExportConfiguration>(this);
+            return content;
         }
     }
 }

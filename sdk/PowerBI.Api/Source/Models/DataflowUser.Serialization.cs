@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -47,7 +48,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(Profile))
             {
                 writer.WritePropertyName("profile"u8);
-                writer.WriteObjectValue(Profile);
+                writer.WriteObjectValue<ServicePrincipalProfile>(Profile);
             }
             writer.WriteEndObject();
         }
@@ -58,14 +59,14 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<DataflowUserAccessRight> dataflowUserAccessRight = default;
-            Optional<string> emailAddress = default;
-            Optional<string> displayName = default;
+            DataflowUserAccessRight? dataflowUserAccessRight = default;
+            string emailAddress = default;
+            string displayName = default;
             string identifier = default;
-            Optional<string> graphId = default;
-            Optional<string> userType = default;
+            string graphId = default;
+            string userType = default;
             PrincipalType principalType = default;
-            Optional<ServicePrincipalProfile> profile = default;
+            ServicePrincipalProfile profile = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("DataflowUserAccessRight"u8))
@@ -117,7 +118,31 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DataflowUser(emailAddress.Value, displayName.Value, identifier, graphId.Value, userType.Value, principalType, profile.Value, Optional.ToNullable(dataflowUserAccessRight));
+            return new DataflowUser(
+                emailAddress,
+                displayName,
+                identifier,
+                graphId,
+                userType,
+                principalType,
+                profile,
+                dataflowUserAccessRight);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new DataflowUser FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDataflowUser(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DataflowUser>(this);
+            return content;
         }
     }
 }

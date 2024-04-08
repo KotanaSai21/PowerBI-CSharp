@@ -668,7 +668,7 @@ namespace Microsoft.PowerBI.Api
             }
         }
 
-        internal HttpMessage CreateGetAppsAsAdminRequest(int top)
+        internal HttpMessage CreateGetAppsAsAdminRequest(int top, int? skip)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -677,13 +677,18 @@ namespace Microsoft.PowerBI.Api
             uri.Reset(_endpoint);
             uri.AppendPath("/v1.0/myorg/admin/apps", false);
             uri.AppendQuery("$top", top, true);
+            if (skip != null)
+            {
+                uri.AppendQuery("$skip", skip.Value, true);
+            }
             request.Uri = uri;
             request.Headers.Add("Accept", "application/json");
             return message;
         }
 
         /// <summary> Returns a list of apps in the organization. </summary>
-        /// <param name="top"> The requested number of entries in the refresh history. If not provided, the default is all available entries. </param>
+        /// <param name="top"> The requested number of apps. </param>
+        /// <param name="skip"> The number entries to be skipped. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// The query parameter $top is required.
@@ -706,9 +711,9 @@ namespace Microsoft.PowerBI.Api
         /// Maximum 200 requests per hour.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
-        public async Task<Response<AdminApps>> GetAppsAsAdminAsync(int top, CancellationToken cancellationToken = default)
+        public async Task<Response<AdminApps>> GetAppsAsAdminAsync(int top, int? skip = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateGetAppsAsAdminRequest(top);
+            using var message = CreateGetAppsAsAdminRequest(top, skip);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -725,7 +730,8 @@ namespace Microsoft.PowerBI.Api
         }
 
         /// <summary> Returns a list of apps in the organization. </summary>
-        /// <param name="top"> The requested number of entries in the refresh history. If not provided, the default is all available entries. </param>
+        /// <param name="top"> The requested number of apps. </param>
+        /// <param name="skip"> The number entries to be skipped. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// The query parameter $top is required.
@@ -748,9 +754,9 @@ namespace Microsoft.PowerBI.Api
         /// Maximum 200 requests per hour.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
-        public Response<AdminApps> GetAppsAsAdmin(int top, CancellationToken cancellationToken = default)
+        public Response<AdminApps> GetAppsAsAdmin(int top, int? skip = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateGetAppsAsAdminRequest(top);
+            using var message = CreateGetAppsAsAdminRequest(top, skip);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

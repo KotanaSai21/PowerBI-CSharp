@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -38,7 +39,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Tiles)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<AdminTile>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -48,7 +49,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DashboardUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -58,7 +59,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Subscriptions)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Subscription>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -88,16 +89,16 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> webUrl = default;
-            Optional<string> embedUrl = default;
-            Optional<Guid> workspaceId = default;
-            Optional<IList<AdminTile>> tiles = default;
-            Optional<IList<DashboardUser>> users = default;
-            Optional<IList<Subscription>> subscriptions = default;
+            string webUrl = default;
+            string embedUrl = default;
+            Guid? workspaceId = default;
+            IList<AdminTile> tiles = default;
+            IList<DashboardUser> users = default;
+            IList<Subscription> subscriptions = default;
             Guid id = default;
-            Optional<string> displayName = default;
-            Optional<bool> isReadOnly = default;
-            Optional<string> appId = default;
+            string displayName = default;
+            bool? isReadOnly = default;
+            string appId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("webUrl"u8))
@@ -186,7 +187,33 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new AdminDashboard(id, displayName.Value, Optional.ToNullable(isReadOnly), appId.Value, webUrl.Value, embedUrl.Value, Optional.ToNullable(workspaceId), Optional.ToList(tiles), Optional.ToList(users), Optional.ToList(subscriptions));
+            return new AdminDashboard(
+                id,
+                displayName,
+                isReadOnly,
+                appId,
+                webUrl,
+                embedUrl,
+                workspaceId,
+                tiles ?? new ChangeTrackingList<AdminTile>(),
+                users ?? new ChangeTrackingList<DashboardUser>(),
+                subscriptions ?? new ChangeTrackingList<Subscription>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new AdminDashboard FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeAdminDashboard(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<AdminDashboard>(this);
+            return content;
         }
     }
 }

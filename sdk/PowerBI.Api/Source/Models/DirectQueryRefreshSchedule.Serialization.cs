@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -55,10 +56,10 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<int> frequency = default;
-            Optional<IList<Days>> days = default;
-            Optional<IList<string>> times = default;
-            Optional<string> localTimeZoneId = default;
+            int? frequency = default;
+            IList<Days> days = default;
+            IList<string> times = default;
+            string localTimeZoneId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("frequency"u8))
@@ -104,7 +105,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DirectQueryRefreshSchedule(Optional.ToNullable(frequency), Optional.ToList(days), Optional.ToList(times), localTimeZoneId.Value);
+            return new DirectQueryRefreshSchedule(frequency, days ?? new ChangeTrackingList<Days>(), times ?? new ChangeTrackingList<string>(), localTimeZoneId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DirectQueryRefreshSchedule FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDirectQueryRefreshSchedule(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DirectQueryRefreshSchedule>(this);
+            return content;
         }
     }
 }

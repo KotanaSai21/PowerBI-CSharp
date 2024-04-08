@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -73,7 +74,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in ColumnSettings)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<ScorecardColumnSetting>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -83,7 +84,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Goals)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Goal>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -96,18 +97,18 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<Guid> id = default;
-            Optional<string> name = default;
-            Optional<DateTimeOffset> createdTime = default;
-            Optional<DateTimeOffset> lastModifiedTime = default;
-            Optional<ScorecardProvisioningStatus> provisioningStatus = default;
-            Optional<Guid> groupId = default;
-            Optional<Guid> datasetId = default;
-            Optional<Guid> reportId = default;
-            Optional<string> description = default;
-            Optional<ScorecardPermission> permissions = default;
-            Optional<IList<ScorecardColumnSetting>> columnSettings = default;
-            Optional<IList<Goal>> goals = default;
+            Guid? id = default;
+            string name = default;
+            DateTimeOffset? createdTime = default;
+            DateTimeOffset? lastModifiedTime = default;
+            ScorecardProvisioningStatus? provisioningStatus = default;
+            Guid? groupId = default;
+            Guid? datasetId = default;
+            Guid? reportId = default;
+            string description = default;
+            ScorecardPermission? permissions = default;
+            IList<ScorecardColumnSetting> columnSettings = default;
+            IList<Goal> goals = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -221,7 +222,35 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Scorecard(Optional.ToNullable(id), name.Value, Optional.ToNullable(createdTime), Optional.ToNullable(lastModifiedTime), Optional.ToNullable(provisioningStatus), Optional.ToNullable(groupId), Optional.ToNullable(datasetId), Optional.ToNullable(reportId), description.Value, Optional.ToNullable(permissions), Optional.ToList(columnSettings), Optional.ToList(goals));
+            return new Scorecard(
+                id,
+                name,
+                createdTime,
+                lastModifiedTime,
+                provisioningStatus,
+                groupId,
+                datasetId,
+                reportId,
+                description,
+                permissions,
+                columnSettings ?? new ChangeTrackingList<ScorecardColumnSetting>(),
+                goals ?? new ChangeTrackingList<Goal>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Scorecard FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeScorecard(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Scorecard>(this);
+            return content;
         }
     }
 }

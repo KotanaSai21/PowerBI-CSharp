@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -22,7 +23,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in UpstreamDatasets)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DependentDataset>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -32,7 +33,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in UpstreamDatamarts)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DependentDatamart>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -45,8 +46,8 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IList<DependentDataset>> upstreamDatasets = default;
-            Optional<IList<DependentDatamart>> upstreamDatamarts = default;
+            IList<DependentDataset> upstreamDatasets = default;
+            IList<DependentDatamart> upstreamDatamarts = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("upstreamDatasets"u8))
@@ -78,7 +79,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new UpstreamDatasetsProperties(Optional.ToList(upstreamDatasets), Optional.ToList(upstreamDatamarts));
+            return new UpstreamDatasetsProperties(upstreamDatasets ?? new ChangeTrackingList<DependentDataset>(), upstreamDatamarts ?? new ChangeTrackingList<DependentDatamart>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static UpstreamDatasetsProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeUpstreamDatasetsProperties(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<UpstreamDatasetsProperties>(this);
+            return content;
         }
     }
 }

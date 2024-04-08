@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -18,8 +18,8 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> modifiedById = default;
-            Optional<string> configuredById = default;
+            string modifiedById = default;
+            string configuredById = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("modifiedById"u8))
@@ -33,7 +33,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatamartAuthoringPropertiesById(modifiedById.Value, configuredById.Value);
+            return new DatamartAuthoringPropertiesById(modifiedById, configuredById);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatamartAuthoringPropertiesById FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatamartAuthoringPropertiesById(document.RootElement);
         }
     }
 }

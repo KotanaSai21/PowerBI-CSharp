@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,12 +19,12 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<Guid> id = default;
-            Optional<string> name = default;
-            Optional<string> keyVaultKeyIdentifier = default;
-            Optional<bool> isDefault = default;
-            Optional<DateTimeOffset> createdAt = default;
-            Optional<DateTimeOffset> updatedAt = default;
+            Guid? id = default;
+            string name = default;
+            string keyVaultKeyIdentifier = default;
+            bool? isDefault = default;
+            DateTimeOffset? createdAt = default;
+            DateTimeOffset? updatedAt = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -74,7 +74,21 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new TenantKey(Optional.ToNullable(id), name.Value, keyVaultKeyIdentifier.Value, Optional.ToNullable(isDefault), Optional.ToNullable(createdAt), Optional.ToNullable(updatedAt));
+            return new TenantKey(
+                id,
+                name,
+                keyVaultKeyIdentifier,
+                isDefault,
+                createdAt,
+                updatedAt);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static TenantKey FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeTenantKey(document.RootElement);
         }
     }
 }

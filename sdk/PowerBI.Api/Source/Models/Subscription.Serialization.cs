@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -85,7 +86,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<SubscriptionUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -99,19 +100,19 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid id = default;
-            Optional<string> title = default;
-            Optional<Guid> artifactId = default;
-            Optional<string> artifactDisplayName = default;
-            Optional<string> subArtifactDisplayName = default;
-            Optional<string> artifactType = default;
-            Optional<bool> isEnabled = default;
-            Optional<string> frequency = default;
-            Optional<DateTimeOffset> startDate = default;
-            Optional<DateTimeOffset> endDate = default;
-            Optional<bool> linkToContent = default;
-            Optional<bool> previewImage = default;
-            Optional<string> attachmentFormat = default;
-            Optional<IList<SubscriptionUser>> users = default;
+            string title = default;
+            Guid? artifactId = default;
+            string artifactDisplayName = default;
+            string subArtifactDisplayName = default;
+            string artifactType = default;
+            bool? isEnabled = default;
+            string frequency = default;
+            DateTimeOffset? startDate = default;
+            DateTimeOffset? endDate = default;
+            bool? linkToContent = default;
+            bool? previewImage = default;
+            string attachmentFormat = default;
+            IList<SubscriptionUser> users = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -218,7 +219,37 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Subscription(id, title.Value, Optional.ToNullable(artifactId), artifactDisplayName.Value, subArtifactDisplayName.Value, artifactType.Value, Optional.ToNullable(isEnabled), frequency.Value, Optional.ToNullable(startDate), Optional.ToNullable(endDate), Optional.ToNullable(linkToContent), Optional.ToNullable(previewImage), attachmentFormat.Value, Optional.ToList(users));
+            return new Subscription(
+                id,
+                title,
+                artifactId,
+                artifactDisplayName,
+                subArtifactDisplayName,
+                artifactType,
+                isEnabled,
+                frequency,
+                startDate,
+                endDate,
+                linkToContent,
+                previewImage,
+                attachmentFormat,
+                users ?? new ChangeTrackingList<SubscriptionUser>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Subscription FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeSubscription(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Subscription>(this);
+            return content;
         }
     }
 }

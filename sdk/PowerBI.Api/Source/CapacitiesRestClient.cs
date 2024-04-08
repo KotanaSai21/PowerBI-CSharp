@@ -284,7 +284,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(workload);
+            content.JsonWriter.WriteObjectValue<PatchWorkloadRequest>(workload);
             request.Content = content;
             return message;
         }
@@ -650,7 +650,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<AssignWorkspacesToCapacityRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -730,7 +730,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<UnassignWorkspacesCapacityRequest>(requestParameters);
             request.Content = content;
             return message;
         }

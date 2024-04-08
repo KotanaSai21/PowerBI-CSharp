@@ -117,7 +117,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(dataset);
+            content.JsonWriter.WriteObjectValue<CreateDatasetRequest>(dataset);
             request.Content = content;
             return message;
         }
@@ -292,7 +292,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(updateDatasetRequest);
+            content.JsonWriter.WriteObjectValue<UpdateDatasetRequest>(updateDatasetRequest);
             request.Content = content;
             return message;
         }
@@ -454,7 +454,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestMessage);
+            content.JsonWriter.WriteObjectValue<DatasetExecuteQueriesRequest>(requestMessage);
             request.Content = content;
             return message;
         }
@@ -480,6 +480,8 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Permissions
         ///
+        /// The tenant setting **Dataset Execute Queries REST API**, found under **Integration settings**, must be enabled.
+        ///
         /// The user must have dataset read and build permissions. For more information, see [Manage dataset access permissions](/power-bi/connect-data/service-datasets-manage-access-permissions).
         ///
         /// ## Required Scope
@@ -489,13 +491,12 @@ namespace Microsoft.PowerBI.Api
         /// ## Limitations
         ///
         /// - Datasets that are hosted in Azure Analysis Services or that have a live connection to an on-premises Azure Analysis Services model aren't supported.
-        /// - The tenant setting **Dataset Execute Queries REST API**, found under **Integration settings**, must be enabled.
         /// - One query per API call.
         /// - One table request per query.
         /// - Maximum of 100,000 rows or 1,000,000 values per query (whichever is hit first). For example if you query for 5 columns, you can get back max 100,000 rows. If you query for 20 columns, you can get back max 50,000 rows (1 million divided by 20).
         /// - Maximum of 15MB of data per query. Once 15MB is exceeded, the current row will be completed but no additional rows will be written.
         /// - There's a limit of 120 query requests per minute per user, regardless of the dataset that's queried.
-        /// - Service Principals aren't supported for datasets with RLS per [RLS limitations](/power-bi/admin/service-admin-rls#considerations-and-limitations) or with SSO enabled. To use Service Principals, make sure the admin tenant setting [_Allow service principals to use Power BI APIs_](/power-bi/admin/service-admin-portal-developer#allow-service-principals-to-use-power-bi-apis) under _Developer settings_ is enabled.
+        /// - To use Service Principals, make sure the admin tenant setting [_Allow service principals to use Power BI APIs_](/power-bi/admin/service-admin-portal-developer#allow-service-principals-to-use-power-bi-apis) under _Developer settings_ is enabled. However, regardless of the admin tenant setting, Service Principals aren't supported for datasets with RLS per [RLS limitations](/power-bi/admin/service-admin-rls#considerations-and-limitations) or datasets with SSO enabled.
         /// - Only DAX queries are supported at this time. MDX and DMV queries are not supported.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
@@ -547,6 +548,8 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Permissions
         ///
+        /// The tenant setting **Dataset Execute Queries REST API**, found under **Integration settings**, must be enabled.
+        ///
         /// The user must have dataset read and build permissions. For more information, see [Manage dataset access permissions](/power-bi/connect-data/service-datasets-manage-access-permissions).
         ///
         /// ## Required Scope
@@ -556,13 +559,12 @@ namespace Microsoft.PowerBI.Api
         /// ## Limitations
         ///
         /// - Datasets that are hosted in Azure Analysis Services or that have a live connection to an on-premises Azure Analysis Services model aren't supported.
-        /// - The tenant setting **Dataset Execute Queries REST API**, found under **Integration settings**, must be enabled.
         /// - One query per API call.
         /// - One table request per query.
         /// - Maximum of 100,000 rows or 1,000,000 values per query (whichever is hit first). For example if you query for 5 columns, you can get back max 100,000 rows. If you query for 20 columns, you can get back max 50,000 rows (1 million divided by 20).
         /// - Maximum of 15MB of data per query. Once 15MB is exceeded, the current row will be completed but no additional rows will be written.
         /// - There's a limit of 120 query requests per minute per user, regardless of the dataset that's queried.
-        /// - Service Principals aren't supported for datasets with RLS per [RLS limitations](/power-bi/admin/service-admin-rls#considerations-and-limitations) or with SSO enabled. To use Service Principals, make sure the admin tenant setting [_Allow service principals to use Power BI APIs_](/power-bi/admin/service-admin-portal-developer#allow-service-principals-to-use-power-bi-apis) under _Developer settings_ is enabled.
+        /// - To use Service Principals, make sure the admin tenant setting [_Allow service principals to use Power BI APIs_](/power-bi/admin/service-admin-portal-developer#allow-service-principals-to-use-power-bi-apis) under _Developer settings_ is enabled. However, regardless of the admin tenant setting, Service Principals aren't supported for datasets with RLS per [RLS limitations](/power-bi/admin/service-admin-rls#considerations-and-limitations) or datasets with SSO enabled.
         /// - Only DAX queries are supported at this time. MDX and DMV queries are not supported.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
@@ -697,7 +699,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestMessage);
+            content.JsonWriter.WriteObjectValue<Table>(requestMessage);
             request.Content = content;
             return message;
         }
@@ -811,7 +813,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestMessage);
+            content.JsonWriter.WriteObjectValue<PostRowsRequest>(requestMessage);
             request.Content = content;
             return message;
         }
@@ -1110,7 +1112,7 @@ namespace Microsoft.PowerBI.Api
             {
                 request.Headers.Add("Content-Type", "application/json");
                 var content = new Utf8JsonRequestContent();
-                content.JsonWriter.WriteObjectValue(datasetRefreshRequest);
+                content.JsonWriter.WriteObjectValue<DatasetRefreshRequest>(datasetRefreshRequest);
                 request.Content = content;
             }
             return message;
@@ -1421,7 +1423,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(datasetModelRefreshScheduleRequest);
+            content.JsonWriter.WriteObjectValue<RefreshScheduleRequest>(datasetModelRefreshScheduleRequest);
             request.Content = content;
             return message;
         }
@@ -1610,7 +1612,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(datasetDQRefreshScheduleRequest);
+            content.JsonWriter.WriteObjectValue<DirectQueryRefreshScheduleRequest>(datasetDQRefreshScheduleRequest);
             request.Content = content;
             return message;
         }
@@ -1719,7 +1721,8 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// Datasets with SQL, Oracle, Teradata, and SAP HANA [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections aren't supported.
+        /// - Datasets with SQL, Oracle, Teradata, and SAP HANA [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections aren't supported.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public async Task<Response<MashupParameters>> GetParametersAsync(string datasetId, CancellationToken cancellationToken = default)
@@ -1756,7 +1759,8 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// Datasets with SQL, Oracle, Teradata, and SAP HANA [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections aren't supported.
+        /// - Datasets with SQL, Oracle, Teradata, and SAP HANA [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections aren't supported.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public Response<MashupParameters> GetParameters(string datasetId, CancellationToken cancellationToken = default)
@@ -1795,7 +1799,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(updateMashupParametersRequest);
+            content.JsonWriter.WriteObjectValue<UpdateMashupParametersRequest>(updateMashupParametersRequest);
             request.Content = content;
             return message;
         }
@@ -1824,7 +1828,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// - Datasets created using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those datasets, the admin must use the Azure Analysis Services client library for Tabular Object Model.
         /// - [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections are only supported with [enhanced dataset metadata](/power-bi/connect-data/desktop-enhanced-dataset-metadata).
         /// - Datasets with Azure Analysis Services live connections aren't supported.
         /// - Maximum of 100 parameters per request.
@@ -1882,7 +1886,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// - Datasets created using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those datasets, the admin must use the Azure Analysis Services client library for Tabular Object Model.
         /// - [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections are only supported with [enhanced dataset metadata](/power-bi/connect-data/desktop-enhanced-dataset-metadata).
         /// - Datasets with Azure Analysis Services live connections aren't supported.
         /// - Maximum of 100 parameters per request.
@@ -2010,7 +2014,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(updateDatasourcesRequest);
+            content.JsonWriter.WriteObjectValue<UpdateDatasourcesRequest>(updateDatasourcesRequest);
             request.Content = content;
             return message;
         }
@@ -2036,7 +2040,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// - Datasets created using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
         /// - Only these data sources are supported: SQL Server, Azure SQL Server, Azure Analysis Services, Azure Synapse, OData, SharePoint, Teradata, and SAP HANA. For other data sources, use the [Update Parameters](/rest/api/power-bi/datasets/update-parameters) API call.
         /// - Changing the data source type isn't supported.
         /// - Data sources that contain parameters in the connection string aren't supported.
@@ -2092,7 +2096,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// - Datasets created using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
         /// - Only these data sources are supported: SQL Server, Azure SQL Server, Azure Analysis Services, Azure Synapse, OData, SharePoint, Teradata, and SAP HANA. For other data sources, use the [Update Parameters](/rest/api/power-bi/datasets/update-parameters) API call.
         /// - Changing the data source type isn't supported.
         /// - Data sources that contain parameters in the connection string aren't supported.
@@ -2140,7 +2144,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(parameters);
+            content.JsonWriter.WriteObjectValue<ConnectionDetails>(parameters);
             request.Content = content;
             return message;
         }
@@ -2240,7 +2244,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(bindToGatewayRequest);
+            content.JsonWriter.WriteObjectValue<BindToGatewayRequest>(bindToGatewayRequest);
             request.Content = content;
             return message;
         }
@@ -2674,7 +2678,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(userDetails);
+            content.JsonWriter.WriteObjectValue<PostDatasetUserAccess>(userDetails);
             request.Content = content;
             return message;
         }
@@ -2778,7 +2782,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(userDetails);
+            content.JsonWriter.WriteObjectValue<DatasetUserAccess>(userDetails);
             request.Content = content;
             return message;
         }
@@ -2991,7 +2995,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(userDetails);
+            content.JsonWriter.WriteObjectValue<PostDatasetUserAccess>(userDetails);
             request.Content = content;
             return message;
         }
@@ -3091,7 +3095,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(userDetails);
+            content.JsonWriter.WriteObjectValue<DatasetUserAccess>(userDetails);
             request.Content = content;
             return message;
         }
@@ -3382,7 +3386,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(dataset);
+            content.JsonWriter.WriteObjectValue<CreateDatasetRequest>(dataset);
             request.Content = content;
             return message;
         }
@@ -3650,7 +3654,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(updateDatasetRequest);
+            content.JsonWriter.WriteObjectValue<UpdateDatasetRequest>(updateDatasetRequest);
             request.Content = content;
             return message;
         }
@@ -3918,7 +3922,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestMessage);
+            content.JsonWriter.WriteObjectValue<Table>(requestMessage);
             request.Content = content;
             return message;
         }
@@ -4036,7 +4040,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestMessage);
+            content.JsonWriter.WriteObjectValue<PostRowsRequest>(requestMessage);
             request.Content = content;
             return message;
         }
@@ -4347,7 +4351,7 @@ namespace Microsoft.PowerBI.Api
             {
                 request.Headers.Add("Content-Type", "application/json");
                 var content = new Utf8JsonRequestContent();
-                content.JsonWriter.WriteObjectValue(datasetRefreshRequest);
+                content.JsonWriter.WriteObjectValue<DatasetRefreshRequest>(datasetRefreshRequest);
                 request.Content = content;
             }
             return message;
@@ -4706,7 +4710,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(datasetModelRefreshScheduleRequest);
+            content.JsonWriter.WriteObjectValue<RefreshScheduleRequest>(datasetModelRefreshScheduleRequest);
             request.Content = content;
             return message;
         }
@@ -4913,7 +4917,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(datasetDQRefreshScheduleRequest);
+            content.JsonWriter.WriteObjectValue<DirectQueryRefreshScheduleRequest>(datasetDQRefreshScheduleRequest);
             request.Content = content;
             return message;
         }
@@ -5033,7 +5037,8 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// Datasets with SQL, Oracle, Teradata, and SAP HANA [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections aren't supported.
+        /// - Datasets with SQL, Oracle, Teradata, and SAP HANA [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections aren't supported.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public async Task<Response<MashupParameters>> GetParametersInGroupAsync(Guid groupId, string datasetId, CancellationToken cancellationToken = default)
@@ -5075,7 +5080,8 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// Datasets with SQL, Oracle, Teradata, and SAP HANA [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections aren't supported.
+        /// - Datasets with SQL, Oracle, Teradata, and SAP HANA [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections aren't supported.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public Response<MashupParameters> GetParametersInGroup(Guid groupId, string datasetId, CancellationToken cancellationToken = default)
@@ -5116,7 +5122,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(updateMashupParametersRequest);
+            content.JsonWriter.WriteObjectValue<UpdateMashupParametersRequest>(updateMashupParametersRequest);
             request.Content = content;
             return message;
         }
@@ -5147,7 +5153,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// - Datasets created using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those datasets, the admin must use the Azure Analysis Services client library for Tabular Object Model.
         /// - [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections are only supported with [enhanced dataset metadata](/power-bi/connect-data/desktop-enhanced-dataset-metadata).
         /// - Datasets with Azure Analysis Services live connections aren't supported.
         /// - Maximum of 100 parameters per request.
@@ -5207,7 +5213,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// - Datasets created using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those datasets, the admin must use the Azure Analysis Services client library for Tabular Object Model.
         /// - [DirectQuery](/power-bi/connect-data/desktop-directquery-about) connections are only supported with [enhanced dataset metadata](/power-bi/connect-data/desktop-enhanced-dataset-metadata).
         /// - Datasets with Azure Analysis Services live connections aren't supported.
         /// - Maximum of 100 parameters per request.
@@ -5349,7 +5355,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(updateDatasourcesRequest);
+            content.JsonWriter.WriteObjectValue<UpdateDatasourcesRequest>(updateDatasourcesRequest);
             request.Content = content;
             return message;
         }
@@ -5381,7 +5387,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// - Datasets created using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
         /// - Only these data sources are supported: SQL Server, Azure SQL Server, Azure Analysis Services, Azure Synapse, OData, SharePoint, Teradata, and SAP HANA. For other data sources, use the [Update Parameters In Group](/rest/api/power-bi/datasets/update-parameters-in-group) API call.
         /// - Changing the data source type isn't supported.
         /// - Data sources that contain parameters in the connection string aren't supported.
@@ -5439,7 +5445,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// - Datasets created using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
+        /// - Datasets created or modified using the public [XMLA endpoint](/power-bi/admin/service-premium-connect-tools) aren't supported. To make changes to those data sources, the admin must use the Azure Analysis Services client library for Tabular Object Model.
         /// - Only these data sources are supported: SQL Server, Azure SQL Server, Azure Analysis Services, Azure Synapse, OData, SharePoint, Teradata, and SAP HANA. For other data sources, use the [Update Parameters In Group](/rest/api/power-bi/datasets/update-parameters-in-group) API call.
         /// - Changing the data source type isn't supported.
         /// - Data sources that contain parameters in the connection string aren't supported.
@@ -5485,7 +5491,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(parameters);
+            content.JsonWriter.WriteObjectValue<ConnectionDetails>(parameters);
             request.Content = content;
             return message;
         }
@@ -5597,7 +5603,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(bindToGatewayRequest);
+            content.JsonWriter.WriteObjectValue<BindToGatewayRequest>(bindToGatewayRequest);
             request.Content = content;
             return message;
         }
@@ -5978,7 +5984,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestMessage);
+            content.JsonWriter.WriteObjectValue<DatasetExecuteQueriesRequest>(requestMessage);
             request.Content = content;
             return message;
         }
@@ -6005,6 +6011,8 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Permissions
         ///
+        /// The tenant setting **Dataset Execute Queries REST API**, found under **Integration settings**, must be enabled.
+        ///
         /// The user must have access to the workspace, and dataset read and build permissions. For more information, see [Manage dataset access permissions](/power-bi/connect-data/service-datasets-manage-access-permissions).
         ///
         /// ## Required Scope
@@ -6014,13 +6022,12 @@ namespace Microsoft.PowerBI.Api
         /// ## Limitations
         ///
         /// - Datasets that are hosted in Azure Analysis Services or that have a live connection to an on-premises Azure Analysis Services model aren't supported.
-        /// - The tenant setting **Dataset Execute Queries REST API**, found under **Integration settings**, must be enabled.
         /// - One query per API call.
         /// - One table request per query.
         /// - Maximum of 100,000 rows or 1,000,000 values per query (whichever is hit first). For example if you query for 5 columns, you can get back max 100,000 rows. If you query for 20 columns, you can get back max 50,000 rows (1 million divided by 20).
         /// - Maximum of 15MB of data per query. Once 15MB is exceeded, the current row will be completed but no additional rows will be written.
         /// - There's a limit of 120 query requests per minute per user, regardless of the dataset that's queried.
-        /// - Service Principals aren't supported for datasets with RLS per [RLS limitations](/power-bi/admin/service-admin-rls#considerations-and-limitations) or with SSO enabled. To use Service Principals, make sure the admin tenant setting [_Allow service principals to use Power BI APIs_](/power-bi/admin/service-admin-portal-developer#allow-service-principals-to-use-power-bi-apis) under _Developer settings_ is enabled.
+        /// - To use Service Principals, make sure the admin tenant setting [_Allow service principals to use Power BI APIs_](/power-bi/admin/service-admin-portal-developer#allow-service-principals-to-use-power-bi-apis) under _Developer settings_ is enabled. However, regardless of the admin tenant setting, Service Principals aren't supported for datasets with RLS per [RLS limitations](/power-bi/admin/service-admin-rls#considerations-and-limitations) or datasets with SSO enabled.
         /// - Only DAX queries are supported at this time. MDX and DMV queries are not supported.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
@@ -6073,6 +6080,8 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Permissions
         ///
+        /// The tenant setting **Dataset Execute Queries REST API**, found under **Integration settings**, must be enabled.
+        ///
         /// The user must have access to the workspace, and dataset read and build permissions. For more information, see [Manage dataset access permissions](/power-bi/connect-data/service-datasets-manage-access-permissions).
         ///
         /// ## Required Scope
@@ -6082,13 +6091,12 @@ namespace Microsoft.PowerBI.Api
         /// ## Limitations
         ///
         /// - Datasets that are hosted in Azure Analysis Services or that have a live connection to an on-premises Azure Analysis Services model aren't supported.
-        /// - The tenant setting **Dataset Execute Queries REST API**, found under **Integration settings**, must be enabled.
         /// - One query per API call.
         /// - One table request per query.
         /// - Maximum of 100,000 rows or 1,000,000 values per query (whichever is hit first). For example if you query for 5 columns, you can get back max 100,000 rows. If you query for 20 columns, you can get back max 50,000 rows (1 million divided by 20).
         /// - Maximum of 15MB of data per query. Once 15MB is exceeded, the current row will be completed but no additional rows will be written.
         /// - There's a limit of 120 query requests per minute per user, regardless of the dataset that's queried.
-        /// - Service Principals aren't supported for datasets with RLS per [RLS limitations](/power-bi/admin/service-admin-rls#considerations-and-limitations) or with SSO enabled. To use Service Principals, make sure the admin tenant setting [_Allow service principals to use Power BI APIs_](/power-bi/admin/service-admin-portal-developer#allow-service-principals-to-use-power-bi-apis) under _Developer settings_ is enabled.
+        /// - To use Service Principals, make sure the admin tenant setting [_Allow service principals to use Power BI APIs_](/power-bi/admin/service-admin-portal-developer#allow-service-principals-to-use-power-bi-apis) under _Developer settings_ is enabled. However, regardless of the admin tenant setting, Service Principals aren't supported for datasets with RLS per [RLS limitations](/power-bi/admin/service-admin-rls#considerations-and-limitations) or datasets with SSO enabled.
         /// - Only DAX queries are supported at this time. MDX and DMV queries are not supported.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
@@ -6321,7 +6329,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<GenerateTokenRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -6463,8 +6471,6 @@ namespace Microsoft.PowerBI.Api
         /// <param name="skip"> Skips the first n results. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
-        /// Each request takes two seconds to process, during which time other requests are queued.
-        ///
         /// ## Permissions
         ///
         /// - The user must have administrator rights (such as Office 365 Global Administrator or Power BI Service Administrator) or authenticate using a service principal.
@@ -6477,6 +6483,10 @@ namespace Microsoft.PowerBI.Api
         /// Tenant.Read.All or Tenant.ReadWrite.All
         ///
         /// Relevant only when authenticating via a standard delegated admin access token. Must not be present when authentication via a service principal is used.
+        ///
+        /// ## Limitations
+        ///
+        /// Maximum 50 requests per hour or 5 requests per minute, per tenant.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public async Task<Response<AdminDatasets>> GetDatasetsAsAdminAsync(string filter = null, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
@@ -6503,8 +6513,6 @@ namespace Microsoft.PowerBI.Api
         /// <param name="skip"> Skips the first n results. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
-        /// Each request takes two seconds to process, during which time other requests are queued.
-        ///
         /// ## Permissions
         ///
         /// - The user must have administrator rights (such as Office 365 Global Administrator or Power BI Service Administrator) or authenticate using a service principal.
@@ -6517,6 +6525,10 @@ namespace Microsoft.PowerBI.Api
         /// Tenant.Read.All or Tenant.ReadWrite.All
         ///
         /// Relevant only when authenticating via a standard delegated admin access token. Must not be present when authentication via a service principal is used.
+        ///
+        /// ## Limitations
+        ///
+        /// Maximum 50 requests per hour or 5 requests per minute, per tenant.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public Response<AdminDatasets> GetDatasetsAsAdmin(string filter = null, int? top = null, int? skip = null, CancellationToken cancellationToken = default)

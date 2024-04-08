@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid id = default;
-            Optional<string> name = default;
+            string name = default;
             bool isEnabled = default;
             foreach (var property in element.EnumerateObject())
             {
@@ -40,7 +40,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DataflowStorageAccount(id, name.Value, isEnabled);
+            return new DataflowStorageAccount(id, name, isEnabled);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DataflowStorageAccount FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDataflowStorageAccount(document.RootElement);
         }
     }
 }

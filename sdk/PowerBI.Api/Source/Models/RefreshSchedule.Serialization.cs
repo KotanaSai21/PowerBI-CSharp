@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -60,11 +61,11 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IList<Days>> days = default;
-            Optional<IList<string>> times = default;
-            Optional<bool> enabled = default;
-            Optional<string> localTimeZoneId = default;
-            Optional<ScheduleNotifyOption> notifyOption = default;
+            IList<Days> days = default;
+            IList<string> times = default;
+            bool? enabled = default;
+            string localTimeZoneId = default;
+            ScheduleNotifyOption? notifyOption = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("days"u8))
@@ -119,7 +120,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new RefreshSchedule(Optional.ToList(days), Optional.ToList(times), Optional.ToNullable(enabled), localTimeZoneId.Value, Optional.ToNullable(notifyOption));
+            return new RefreshSchedule(days ?? new ChangeTrackingList<Days>(), times ?? new ChangeTrackingList<string>(), enabled, localTimeZoneId, notifyOption);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static RefreshSchedule FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeRefreshSchedule(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<RefreshSchedule>(this);
+            return content;
         }
     }
 }

@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,10 +20,10 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid artifactId = default;
-            Optional<string> artifactDisplayName = default;
-            Optional<Guid> sourceArtifactId = default;
-            Optional<Guid> targetArtifactId = default;
-            Optional<DateTimeOffset> lastDeploymentTime = default;
+            string artifactDisplayName = default;
+            Guid? sourceArtifactId = default;
+            Guid? targetArtifactId = default;
+            DateTimeOffset? lastDeploymentTime = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("artifactId"u8))
@@ -64,7 +64,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new PipelineStageReport(artifactId, artifactDisplayName.Value, Optional.ToNullable(sourceArtifactId), Optional.ToNullable(targetArtifactId), Optional.ToNullable(lastDeploymentTime));
+            return new PipelineStageReport(artifactId, artifactDisplayName, sourceArtifactId, targetArtifactId, lastDeploymentTime);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new PipelineStageReport FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePipelineStageReport(document.RootElement);
         }
     }
 }

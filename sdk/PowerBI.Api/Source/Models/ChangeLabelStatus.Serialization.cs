@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -33,6 +34,14 @@ namespace Microsoft.PowerBI.Api.Models
                 }
             }
             return new ChangeLabelStatus(id, status);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static ChangeLabelStatus FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeChangeLabelStatus(document.RootElement);
         }
     }
 }

@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -21,14 +21,14 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid id = default;
-            Optional<string> displayName = default;
-            Optional<IReadOnlyList<string>> admins = default;
-            Optional<string> sku = default;
+            string displayName = default;
+            IReadOnlyList<string> admins = default;
+            string sku = default;
             CapacityState state = default;
             CapacityUserAccessRight capacityUserAccessRight = default;
-            Optional<string> region = default;
-            Optional<Guid> tenantKeyId = default;
-            Optional<TenantKey> tenantKey = default;
+            string region = default;
+            Guid? tenantKeyId = default;
+            TenantKey tenantKey = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -94,7 +94,24 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Capacity(id, displayName.Value, Optional.ToList(admins), sku.Value, state, capacityUserAccessRight, region.Value, Optional.ToNullable(tenantKeyId), tenantKey.Value);
+            return new Capacity(
+                id,
+                displayName,
+                admins ?? new ChangeTrackingList<string>(),
+                sku,
+                state,
+                capacityUserAccessRight,
+                region,
+                tenantKeyId,
+                tenantKey);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Capacity FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeCapacity(document.RootElement);
         }
     }
 }

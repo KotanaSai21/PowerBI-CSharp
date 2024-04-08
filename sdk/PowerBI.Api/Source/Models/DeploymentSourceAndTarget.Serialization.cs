@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,10 +20,10 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid source = default;
-            Optional<string> sourceDisplayName = default;
-            Optional<Guid> target = default;
-            Optional<string> targetDisplayName = default;
-            Optional<string> type = default;
+            string sourceDisplayName = default;
+            Guid? target = default;
+            string targetDisplayName = default;
+            string type = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("source"u8))
@@ -56,7 +56,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DeploymentSourceAndTarget(source, sourceDisplayName.Value, Optional.ToNullable(target), targetDisplayName.Value, type.Value);
+            return new DeploymentSourceAndTarget(source, sourceDisplayName, target, targetDisplayName, type);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DeploymentSourceAndTarget FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDeploymentSourceAndTarget(document.RootElement);
         }
     }
 }

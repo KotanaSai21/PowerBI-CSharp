@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,10 +19,10 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IReadOnlyList<ChangeLabelStatus>> dashboards = default;
-            Optional<IReadOnlyList<ChangeLabelStatus>> reports = default;
-            Optional<IReadOnlyList<ChangeLabelStatus>> dataflows = default;
-            Optional<IReadOnlyList<ChangeLabelStatus>> datasets = default;
+            IReadOnlyList<ChangeLabelStatus> dashboards = default;
+            IReadOnlyList<ChangeLabelStatus> reports = default;
+            IReadOnlyList<ChangeLabelStatus> dataflows = default;
+            IReadOnlyList<ChangeLabelStatus> datasets = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("dashboards"u8))
@@ -82,7 +82,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new InformationProtectionChangeLabelResponse(Optional.ToList(dashboards), Optional.ToList(reports), Optional.ToList(dataflows), Optional.ToList(datasets));
+            return new InformationProtectionChangeLabelResponse(dashboards ?? new ChangeTrackingList<ChangeLabelStatus>(), reports ?? new ChangeTrackingList<ChangeLabelStatus>(), dataflows ?? new ChangeTrackingList<ChangeLabelStatus>(), datasets ?? new ChangeTrackingList<ChangeLabelStatus>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static InformationProtectionChangeLabelResponse FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeInformationProtectionChangeLabelResponse(document.RootElement);
         }
     }
 }

@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -18,7 +19,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(EndorsementDetails))
             {
                 writer.WritePropertyName("endorsementDetails"u8);
-                writer.WriteObjectValue(EndorsementDetails);
+                writer.WriteObjectValue<EndorsementDetails>(EndorsementDetails);
             }
             writer.WriteEndObject();
         }
@@ -29,7 +30,7 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<EndorsementDetails> endorsementDetails = default;
+            EndorsementDetails endorsementDetails = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("endorsementDetails"u8))
@@ -42,7 +43,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new EndorsmentProperties(endorsementDetails.Value);
+            return new EndorsmentProperties(endorsementDetails);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static EndorsmentProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeEndorsmentProperties(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<EndorsmentProperties>(this);
+            return content;
         }
     }
 }

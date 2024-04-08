@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,24 +20,24 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<EndorsementDetails> endorsementDetails = default;
-            Optional<SensitivityLabel> sensitivityLabel = default;
-            Optional<string> modifiedBy = default;
-            Optional<DateTimeOffset> modifiedDateTime = default;
-            Optional<string> configuredBy = default;
-            Optional<string> modifiedById = default;
-            Optional<string> configuredById = default;
-            Optional<IReadOnlyList<DependentDataflow>> upstreamDataflows = default;
-            Optional<IReadOnlyList<DependentDatamart>> upstreamDatamarts = default;
-            Optional<IReadOnlyList<DatasourceUsage>> datasourceUsages = default;
-            Optional<IReadOnlyList<DatamartUser>> users = default;
+            EndorsementDetails endorsementDetails = default;
+            SensitivityLabel sensitivityLabel = default;
+            string modifiedBy = default;
+            DateTimeOffset? modifiedDateTime = default;
+            string configuredBy = default;
+            string modifiedById = default;
+            string configuredById = default;
+            IReadOnlyList<DependentDataflow> upstreamDataflows = default;
+            IReadOnlyList<DependentDatamart> upstreamDatamarts = default;
+            IReadOnlyList<DatasourceUsage> datasourceUsages = default;
+            IReadOnlyList<DatamartUser> users = default;
             Guid id = default;
-            Optional<string> name = default;
-            Optional<string> description = default;
-            Optional<DatamartType> type = default;
-            Optional<DatamartStatus> status = default;
-            Optional<DatamartState> state = default;
-            Optional<string> suspendedBatchId = default;
+            string name = default;
+            string description = default;
+            DatamartType? type = default;
+            DatamartStatus? status = default;
+            DatamartState? state = default;
+            string suspendedBatchId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("endorsementDetails"u8))
@@ -191,7 +191,33 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new WorkspaceInfoDatamart(id, name.Value, description.Value, Optional.ToNullable(type), Optional.ToNullable(status), Optional.ToNullable(state), suspendedBatchId.Value, endorsementDetails.Value, sensitivityLabel.Value, modifiedBy.Value, Optional.ToNullable(modifiedDateTime), configuredBy.Value, modifiedById.Value, configuredById.Value, Optional.ToList(upstreamDataflows), Optional.ToList(upstreamDatamarts), Optional.ToList(datasourceUsages), Optional.ToList(users));
+            return new WorkspaceInfoDatamart(
+                id,
+                name,
+                description,
+                type,
+                status,
+                state,
+                suspendedBatchId,
+                endorsementDetails,
+                sensitivityLabel,
+                modifiedBy,
+                modifiedDateTime,
+                configuredBy,
+                modifiedById,
+                configuredById,
+                upstreamDataflows ?? new ChangeTrackingList<DependentDataflow>(),
+                upstreamDatamarts ?? new ChangeTrackingList<DependentDatamart>(),
+                datasourceUsages ?? new ChangeTrackingList<DatasourceUsage>(),
+                users ?? new ChangeTrackingList<DatamartUser>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new WorkspaceInfoDatamart FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorkspaceInfoDatamart(document.RootElement);
         }
     }
 }

@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,10 +20,10 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid id = default;
-            Optional<string> name = default;
-            Optional<string> description = default;
-            Optional<DateTimeOffset> lastUpdate = default;
-            Optional<string> publishedBy = default;
+            string name = default;
+            string description = default;
+            DateTimeOffset? lastUpdate = default;
+            string publishedBy = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -56,7 +56,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new App(id, name.Value, description.Value, Optional.ToNullable(lastUpdate), publishedBy.Value);
+            return new App(id, name, description, lastUpdate, publishedBy);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static App FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeApp(document.RootElement);
         }
     }
 }

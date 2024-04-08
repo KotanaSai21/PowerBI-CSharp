@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,10 +20,10 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             AssignmentStatus status = default;
-            Optional<DateTimeOffset> startTime = default;
-            Optional<DateTimeOffset> endTime = default;
-            Optional<Guid> capacityId = default;
-            Optional<Guid> activityId = default;
+            DateTimeOffset? startTime = default;
+            DateTimeOffset? endTime = default;
+            Guid? capacityId = default;
+            Guid? activityId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("status"u8))
@@ -68,7 +68,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new WorkspaceCapacityAssignmentStatus(status, Optional.ToNullable(startTime), Optional.ToNullable(endTime), Optional.ToNullable(capacityId), Optional.ToNullable(activityId));
+            return new WorkspaceCapacityAssignmentStatus(status, startTime, endTime, capacityId, activityId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static WorkspaceCapacityAssignmentStatus FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorkspaceCapacityAssignmentStatus(document.RootElement);
         }
     }
 }

@@ -9,7 +9,7 @@ using System;
 
 namespace Microsoft.PowerBI.Api.Models
 {
-    /// <summary> The rank validation information for a Power BI goal, to be used with the [Move Goals](/rest/api/power-bi/scorecards/move-goals) API request. The caller provides validation information to confirm that they know the existing position of the goal within the hierarchy of goals. </summary>
+    /// <summary> The rank validation information for a Power BI goal, to be used with the [Move Goals](/rest/api/power-bi/scorecards_(preview)/move-goals) API request. The caller provides validation information to confirm that they know the existing position of the goal within the hierarchy of goals. </summary>
     public partial class GoalRankValidationInfo
     {
         /// <summary> Initializes a new instance of <see cref="GoalRankValidationInfo"/>. </summary>

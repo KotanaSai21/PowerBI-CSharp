@@ -6,11 +6,10 @@
 #nullable disable
 
 using System;
-using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
 {
-    /// <summary> A request object to be used with the [Move Goals](/rest/api/power-bi/scorecards/move-goals) API request. </summary>
+    /// <summary> A request object to be used with the [Move Goals](/rest/api/power-bi/scorecards_(preview)/move-goals) API request. </summary>
     public partial class GoalsMoveRequest
     {
         /// <summary> Initializes a new instance of <see cref="GoalsMoveRequest"/>. </summary>

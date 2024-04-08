@@ -48,7 +48,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(artifacts);
+            content.JsonWriter.WriteObjectValue<InformationProtectionArtifactsChangeLabel>(artifacts);
             request.Content = content;
             return message;
         }
@@ -155,7 +155,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(informationProtectionChangeLabelDetails);
+            content.JsonWriter.WriteObjectValue<InformationProtectionChangeLabelDetails>(informationProtectionChangeLabelDetails);
             request.Content = content;
             return message;
         }

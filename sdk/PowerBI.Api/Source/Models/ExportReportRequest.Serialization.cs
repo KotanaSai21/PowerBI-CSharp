@@ -20,14 +20,22 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(PowerBIReportConfiguration))
             {
                 writer.WritePropertyName("powerBIReportConfiguration"u8);
-                writer.WriteObjectValue(PowerBIReportConfiguration);
+                writer.WriteObjectValue<PowerBIReportExportConfiguration>(PowerBIReportConfiguration);
             }
             if (Optional.IsDefined(PaginatedReportConfiguration))
             {
                 writer.WritePropertyName("paginatedReportConfiguration"u8);
-                writer.WriteObjectValue(PaginatedReportConfiguration);
+                writer.WriteObjectValue<PaginatedReportExportConfiguration>(PaginatedReportConfiguration);
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<ExportReportRequest>(this);
+            return content;
         }
     }
 }

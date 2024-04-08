@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -23,7 +24,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Tables)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Table>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -43,7 +44,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Expressions)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Expression>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -53,19 +54,19 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Roles)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Role>(item);
                 }
                 writer.WriteEndArray();
             }
             if (Optional.IsDefined(EndorsementDetails))
             {
                 writer.WritePropertyName("endorsementDetails"u8);
-                writer.WriteObjectValue(EndorsementDetails);
+                writer.WriteObjectValue<EndorsementDetails>(EndorsementDetails);
             }
             if (Optional.IsDefined(SensitivityLabel))
             {
                 writer.WritePropertyName("sensitivityLabel"u8);
-                writer.WriteObjectValue(SensitivityLabel);
+                writer.WriteObjectValue<SensitivityLabel>(SensitivityLabel);
             }
             if (Optional.IsDefined(TargetStorageMode))
             {
@@ -78,7 +79,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in DatasourceUsages)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DatasourceUsage>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -88,7 +89,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in MisconfiguredDatasourceUsages)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DatasourceUsage>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -98,7 +99,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in UpstreamDatamart)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DependentDatamarts>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -108,7 +109,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in UpstreamDatasets)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DependentDataset>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -118,7 +119,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in UpstreamDatamarts)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DependentDatamart>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -128,7 +129,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DatasetUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -165,7 +166,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in UpstreamDataflows)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DependentDataflow>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -178,27 +179,27 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IList<Table>> tables = default;
-            Optional<string> schemaRetrievalError = default;
-            Optional<bool> schemaMayNotBeUpToDate = default;
-            Optional<IList<Expression>> expressions = default;
-            Optional<IList<Role>> roles = default;
-            Optional<EndorsementDetails> endorsementDetails = default;
-            Optional<SensitivityLabel> sensitivityLabel = default;
-            Optional<string> targetStorageMode = default;
-            Optional<IList<DatasourceUsage>> datasourceUsages = default;
-            Optional<IList<DatasourceUsage>> misconfiguredDatasourceUsages = default;
-            Optional<IList<DependentDatamarts>> upstreamDatamart = default;
-            Optional<IList<DependentDataset>> upstreamDatasets = default;
-            Optional<IList<DependentDatamart>> upstreamDatamarts = default;
-            Optional<IList<DatasetUser>> users = default;
+            IList<Table> tables = default;
+            string schemaRetrievalError = default;
+            bool? schemaMayNotBeUpToDate = default;
+            IList<Expression> expressions = default;
+            IList<Role> roles = default;
+            EndorsementDetails endorsementDetails = default;
+            SensitivityLabel sensitivityLabel = default;
+            string targetStorageMode = default;
+            IList<DatasourceUsage> datasourceUsages = default;
+            IList<DatasourceUsage> misconfiguredDatasourceUsages = default;
+            IList<DependentDatamarts> upstreamDatamart = default;
+            IList<DependentDataset> upstreamDatasets = default;
+            IList<DependentDatamart> upstreamDatamarts = default;
+            IList<DatasetUser> users = default;
             string id = default;
-            Optional<string> name = default;
-            Optional<string> configuredBy = default;
-            Optional<DateTimeOffset> createdDate = default;
-            Optional<string> contentProviderType = default;
-            Optional<string> description = default;
-            Optional<IList<DependentDataflow>> upstreamDataflows = default;
+            string name = default;
+            string configuredBy = default;
+            DateTimeOffset? createdDate = default;
+            string contentProviderType = default;
+            string description = default;
+            IList<DependentDataflow> upstreamDataflows = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("tables"u8))
@@ -413,7 +414,44 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new WorkspaceInfoDataset(id, name.Value, configuredBy.Value, Optional.ToNullable(createdDate), contentProviderType.Value, description.Value, Optional.ToList(upstreamDataflows), Optional.ToList(tables), schemaRetrievalError.Value, Optional.ToNullable(schemaMayNotBeUpToDate), Optional.ToList(expressions), Optional.ToList(roles), endorsementDetails.Value, sensitivityLabel.Value, targetStorageMode.Value, Optional.ToList(datasourceUsages), Optional.ToList(misconfiguredDatasourceUsages), Optional.ToList(upstreamDatamart), Optional.ToList(upstreamDatasets), Optional.ToList(upstreamDatamarts), Optional.ToList(users));
+            return new WorkspaceInfoDataset(
+                id,
+                name,
+                configuredBy,
+                createdDate,
+                contentProviderType,
+                description,
+                upstreamDataflows ?? new ChangeTrackingList<DependentDataflow>(),
+                tables ?? new ChangeTrackingList<Table>(),
+                schemaRetrievalError,
+                schemaMayNotBeUpToDate,
+                expressions ?? new ChangeTrackingList<Expression>(),
+                roles ?? new ChangeTrackingList<Role>(),
+                endorsementDetails,
+                sensitivityLabel,
+                targetStorageMode,
+                datasourceUsages ?? new ChangeTrackingList<DatasourceUsage>(),
+                misconfiguredDatasourceUsages ?? new ChangeTrackingList<DatasourceUsage>(),
+                upstreamDatamart ?? new ChangeTrackingList<DependentDatamarts>(),
+                upstreamDatasets ?? new ChangeTrackingList<DependentDataset>(),
+                upstreamDatamarts ?? new ChangeTrackingList<DependentDatamart>(),
+                users ?? new ChangeTrackingList<DatasetUser>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new WorkspaceInfoDataset FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorkspaceInfoDataset(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<WorkspaceInfoDataset>(this);
+            return content;
         }
     }
 }

@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,11 +19,11 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<int> attemptId = default;
-            Optional<DateTimeOffset> startTime = default;
-            Optional<DateTimeOffset> endTime = default;
-            Optional<string> serviceExceptionJson = default;
-            Optional<RefreshAttemptType> type = default;
+            int? attemptId = default;
+            DateTimeOffset? startTime = default;
+            DateTimeOffset? endTime = default;
+            string serviceExceptionJson = default;
+            RefreshAttemptType? type = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("attemptId"u8))
@@ -68,7 +68,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new RefreshAttempt(Optional.ToNullable(attemptId), Optional.ToNullable(startTime), Optional.ToNullable(endTime), serviceExceptionJson.Value, Optional.ToNullable(type));
+            return new RefreshAttempt(attemptId, startTime, endTime, serviceExceptionJson, type);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static RefreshAttempt FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeRefreshAttempt(document.RootElement);
         }
     }
 }

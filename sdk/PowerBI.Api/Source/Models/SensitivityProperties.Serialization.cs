@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -18,7 +19,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(SensitivityLabel))
             {
                 writer.WritePropertyName("sensitivityLabel"u8);
-                writer.WriteObjectValue(SensitivityLabel);
+                writer.WriteObjectValue<SensitivityLabel>(SensitivityLabel);
             }
             writer.WriteEndObject();
         }
@@ -29,7 +30,7 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<SensitivityLabel> sensitivityLabel = default;
+            SensitivityLabel sensitivityLabel = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("sensitivityLabel"u8))
@@ -42,7 +43,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new SensitivityProperties(sensitivityLabel.Value);
+            return new SensitivityProperties(sensitivityLabel);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static SensitivityProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeSensitivityProperties(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<SensitivityProperties>(this);
+            return content;
         }
     }
 }

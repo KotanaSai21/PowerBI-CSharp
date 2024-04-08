@@ -300,7 +300,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(datasourceToGatewayRequest);
+            content.JsonWriter.WriteObjectValue<PublishDatasourceToGatewayRequest>(datasourceToGatewayRequest);
             request.Content = content;
             return message;
         }
@@ -584,7 +584,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(updateDatasourceRequest);
+            content.JsonWriter.WriteObjectValue<UpdateDatasourceRequest>(updateDatasourceRequest);
             request.Content = content;
             return message;
         }
@@ -885,7 +885,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(addUserToDatasourceRequest);
+            content.JsonWriter.WriteObjectValue<DatasourceUser>(addUserToDatasourceRequest);
             request.Content = content;
             return message;
         }

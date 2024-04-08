@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -83,7 +84,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Notes)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<GoalNote>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -96,19 +97,19 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<DateTimeOffset> timestamp = default;
-            Optional<Guid> goalId = default;
-            Optional<Guid> scorecardId = default;
-            Optional<DateTimeOffset> createdTime = default;
-            Optional<DateTimeOffset> lastModifiedTime = default;
-            Optional<double> value = default;
-            Optional<double> target = default;
-            Optional<string> valueDisplayString = default;
-            Optional<string> targetDisplayString = default;
-            Optional<int> trend = default;
-            Optional<double> forecast = default;
-            Optional<int> status = default;
-            Optional<IList<GoalNote>> notes = default;
+            DateTimeOffset? timestamp = default;
+            Guid? goalId = default;
+            Guid? scorecardId = default;
+            DateTimeOffset? createdTime = default;
+            DateTimeOffset? lastModifiedTime = default;
+            double? value = default;
+            double? target = default;
+            string valueDisplayString = default;
+            string targetDisplayString = default;
+            int? trend = default;
+            double? forecast = default;
+            int? status = default;
+            IList<GoalNote> notes = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("timestamp"u8))
@@ -226,7 +227,36 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new GoalValue(Optional.ToNullable(timestamp), Optional.ToNullable(goalId), Optional.ToNullable(scorecardId), Optional.ToNullable(createdTime), Optional.ToNullable(lastModifiedTime), Optional.ToNullable(value), Optional.ToNullable(target), valueDisplayString.Value, targetDisplayString.Value, Optional.ToNullable(trend), Optional.ToNullable(forecast), Optional.ToNullable(status), Optional.ToList(notes));
+            return new GoalValue(
+                timestamp,
+                goalId,
+                scorecardId,
+                createdTime,
+                lastModifiedTime,
+                value,
+                target,
+                valueDisplayString,
+                targetDisplayString,
+                trend,
+                forecast,
+                status,
+                notes ?? new ChangeTrackingList<GoalNote>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static GoalValue FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeGoalValue(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<GoalValue>(this);
+            return content;
         }
     }
 }

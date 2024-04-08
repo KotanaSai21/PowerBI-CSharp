@@ -7,6 +7,7 @@
 
 using System;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -34,7 +35,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(ConnectionDetails))
             {
                 writer.WritePropertyName("connectionDetails"u8);
-                writer.WriteObjectValue(ConnectionDetails);
+                writer.WriteObjectValue<DatasourceConnectionDetails>(ConnectionDetails);
             }
             if (Optional.IsDefined(GatewayId))
             {
@@ -55,12 +56,12 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> name = default;
-            Optional<string> connectionString = default;
-            Optional<string> datasourceType = default;
-            Optional<DatasourceConnectionDetails> connectionDetails = default;
-            Optional<Guid> gatewayId = default;
-            Optional<Guid> datasourceId = default;
+            string name = default;
+            string connectionString = default;
+            string datasourceType = default;
+            DatasourceConnectionDetails connectionDetails = default;
+            Guid? gatewayId = default;
+            Guid? datasourceId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("name"u8))
@@ -106,7 +107,29 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Datasource(name.Value, connectionString.Value, datasourceType.Value, connectionDetails.Value, Optional.ToNullable(gatewayId), Optional.ToNullable(datasourceId));
+            return new Datasource(
+                name,
+                connectionString,
+                datasourceType,
+                connectionDetails,
+                gatewayId,
+                datasourceId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Datasource FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasource(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Datasource>(this);
+            return content;
         }
     }
 }

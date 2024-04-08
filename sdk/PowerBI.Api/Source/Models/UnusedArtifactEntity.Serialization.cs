@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -22,9 +22,9 @@ namespace Microsoft.PowerBI.Api.Models
             string artifactId = default;
             string displayName = default;
             string artifactType = default;
-            Optional<int> artifactSizeInMB = default;
-            Optional<DateTimeOffset> createdDateTime = default;
-            Optional<DateTimeOffset> lastAccessedDateTime = default;
+            int? artifactSizeInMB = default;
+            DateTimeOffset? createdDateTime = default;
+            DateTimeOffset? lastAccessedDateTime = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("artifactId"u8))
@@ -70,7 +70,21 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new UnusedArtifactEntity(artifactId, displayName, artifactType, Optional.ToNullable(artifactSizeInMB), Optional.ToNullable(createdDateTime), Optional.ToNullable(lastAccessedDateTime));
+            return new UnusedArtifactEntity(
+                artifactId,
+                displayName,
+                artifactType,
+                artifactSizeInMB,
+                createdDateTime,
+                lastAccessedDateTime);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static UnusedArtifactEntity FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeUnusedArtifactEntity(document.RootElement);
         }
     }
 }

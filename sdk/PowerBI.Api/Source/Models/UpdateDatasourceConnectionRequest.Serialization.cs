@@ -16,13 +16,21 @@ namespace Microsoft.PowerBI.Api.Models
         {
             writer.WriteStartObject();
             writer.WritePropertyName("connectionDetails"u8);
-            writer.WriteObjectValue(ConnectionDetails);
+            writer.WriteObjectValue<DatasourceConnectionDetails>(ConnectionDetails);
             if (Optional.IsDefined(DatasourceSelector))
             {
                 writer.WritePropertyName("datasourceSelector"u8);
-                writer.WriteObjectValue(DatasourceSelector);
+                writer.WriteObjectValue<Datasource>(DatasourceSelector);
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<UpdateDatasourceConnectionRequest>(this);
+            return content;
         }
     }
 }

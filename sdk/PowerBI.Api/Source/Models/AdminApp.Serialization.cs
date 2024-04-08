@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,12 +19,12 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> workspaceId = default;
+            string workspaceId = default;
             Guid id = default;
-            Optional<string> name = default;
-            Optional<string> description = default;
-            Optional<DateTimeOffset> lastUpdate = default;
-            Optional<string> publishedBy = default;
+            string name = default;
+            string description = default;
+            DateTimeOffset? lastUpdate = default;
+            string publishedBy = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("workspaceId"u8))
@@ -62,7 +62,21 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new AdminApp(id, name.Value, description.Value, Optional.ToNullable(lastUpdate), publishedBy.Value, workspaceId.Value);
+            return new AdminApp(
+                id,
+                name,
+                description,
+                lastUpdate,
+                publishedBy,
+                workspaceId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new AdminApp FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeAdminApp(document.RootElement);
         }
     }
 }

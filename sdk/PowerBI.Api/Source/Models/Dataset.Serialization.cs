@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -50,7 +51,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(Encryption))
             {
                 writer.WritePropertyName("Encryption"u8);
-                writer.WriteObjectValue(Encryption);
+                writer.WriteObjectValue<Encryption>(Encryption);
             }
             if (Optional.IsCollectionDefined(Users))
             {
@@ -58,7 +59,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DatasetUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -115,7 +116,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in UpstreamDataflows)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DependentDataflow>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -128,26 +129,26 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<DatasetQueryScaleOutSettings> queryScaleOutSettings = default;
-            Optional<string> createReportEmbedURL = default;
-            Optional<string> qnaEmbedURL = default;
-            Optional<string> webUrl = default;
-            Optional<bool> isEffectiveIdentityRequired = default;
-            Optional<bool> isEffectiveIdentityRolesRequired = default;
-            Optional<bool> isOnPremGatewayRequired = default;
-            Optional<Encryption> encryption = default;
-            Optional<IList<DatasetUser>> users = default;
-            Optional<bool> addRowsAPIEnabled = default;
-            Optional<bool> isRefreshable = default;
-            Optional<bool> isInPlaceSharingEnabled = default;
-            Optional<string> targetStorageMode = default;
+            DatasetQueryScaleOutSettings queryScaleOutSettings = default;
+            string createReportEmbedURL = default;
+            string qnaEmbedURL = default;
+            string webUrl = default;
+            bool? isEffectiveIdentityRequired = default;
+            bool? isEffectiveIdentityRolesRequired = default;
+            bool? isOnPremGatewayRequired = default;
+            Encryption encryption = default;
+            IList<DatasetUser> users = default;
+            bool? addRowsAPIEnabled = default;
+            bool? isRefreshable = default;
+            bool? isInPlaceSharingEnabled = default;
+            string targetStorageMode = default;
             string id = default;
-            Optional<string> name = default;
-            Optional<string> configuredBy = default;
-            Optional<DateTimeOffset> createdDate = default;
-            Optional<string> contentProviderType = default;
-            Optional<string> description = default;
-            Optional<IList<DependentDataflow>> upstreamDataflows = default;
+            string name = default;
+            string configuredBy = default;
+            DateTimeOffset? createdDate = default;
+            string contentProviderType = default;
+            string description = default;
+            IList<DependentDataflow> upstreamDataflows = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("queryScaleOutSettings"u8))
@@ -305,7 +306,43 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Dataset(id, name.Value, configuredBy.Value, Optional.ToNullable(createdDate), contentProviderType.Value, description.Value, Optional.ToList(upstreamDataflows), queryScaleOutSettings.Value, createReportEmbedURL.Value, qnaEmbedURL.Value, webUrl.Value, Optional.ToNullable(isEffectiveIdentityRequired), Optional.ToNullable(isEffectiveIdentityRolesRequired), Optional.ToNullable(isOnPremGatewayRequired), encryption.Value, Optional.ToList(users), Optional.ToNullable(addRowsAPIEnabled), Optional.ToNullable(isRefreshable), Optional.ToNullable(isInPlaceSharingEnabled), targetStorageMode.Value);
+            return new Dataset(
+                id,
+                name,
+                configuredBy,
+                createdDate,
+                contentProviderType,
+                description,
+                upstreamDataflows ?? new ChangeTrackingList<DependentDataflow>(),
+                queryScaleOutSettings,
+                createReportEmbedURL,
+                qnaEmbedURL,
+                webUrl,
+                isEffectiveIdentityRequired,
+                isEffectiveIdentityRolesRequired,
+                isOnPremGatewayRequired,
+                encryption,
+                users ?? new ChangeTrackingList<DatasetUser>(),
+                addRowsAPIEnabled,
+                isRefreshable,
+                isInPlaceSharingEnabled,
+                targetStorageMode);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new Dataset FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDataset(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Dataset>(this);
+            return content;
         }
     }
 }

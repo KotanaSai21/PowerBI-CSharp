@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -45,9 +46,9 @@ namespace Microsoft.PowerBI.Api.Models
             }
             string name = default;
             string expression = default;
-            Optional<string> formatString = default;
-            Optional<string> description = default;
-            Optional<bool> isHidden = default;
+            string formatString = default;
+            string description = default;
+            bool? isHidden = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("name"u8))
@@ -80,7 +81,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Measure(name, expression, formatString.Value, description.Value, Optional.ToNullable(isHidden));
+            return new Measure(name, expression, formatString, description, isHidden);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Measure FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeMeasure(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Measure>(this);
+            return content;
         }
     }
 }

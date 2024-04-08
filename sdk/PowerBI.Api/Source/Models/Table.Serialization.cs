@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -22,7 +23,7 @@ namespace Microsoft.PowerBI.Api.Models
             writer.WriteStartArray();
             foreach (var item in Columns)
             {
-                writer.WriteObjectValue(item);
+                writer.WriteObjectValue<Column>(item);
             }
             writer.WriteEndArray();
             if (Optional.IsCollectionDefined(Rows))
@@ -31,7 +32,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Rows)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Row>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -41,7 +42,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Measures)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Measure>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -61,7 +62,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Source)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<ASMashupExpression>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -76,11 +77,11 @@ namespace Microsoft.PowerBI.Api.Models
             }
             string name = default;
             IList<Column> columns = default;
-            Optional<IList<Row>> rows = default;
-            Optional<IList<Measure>> measures = default;
-            Optional<bool> isHidden = default;
-            Optional<string> description = default;
-            Optional<IList<ASMashupExpression>> source = default;
+            IList<Row> rows = default;
+            IList<Measure> measures = default;
+            bool? isHidden = default;
+            string description = default;
+            IList<ASMashupExpression> source = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("name"u8))
@@ -155,7 +156,30 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Table(name, columns, Optional.ToList(rows), Optional.ToList(measures), Optional.ToNullable(isHidden), description.Value, Optional.ToList(source));
+            return new Table(
+                name,
+                columns,
+                rows ?? new ChangeTrackingList<Row>(),
+                measures ?? new ChangeTrackingList<Measure>(),
+                isHidden,
+                description,
+                source ?? new ChangeTrackingList<ASMashupExpression>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Table FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeTable(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Table>(this);
+            return content;
         }
     }
 }

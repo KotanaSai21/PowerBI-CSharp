@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,10 +19,10 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<Guid> id = default;
-            Optional<DateTimeOffset> createdDateTime = default;
-            Optional<string> status = default;
-            Optional<PowerBIApiErrorResponseDetail> error = default;
+            Guid? id = default;
+            DateTimeOffset? createdDateTime = default;
+            string status = default;
+            PowerBIApiErrorResponseDetail error = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -58,7 +58,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new ScanRequest(Optional.ToNullable(id), Optional.ToNullable(createdDateTime), status.Value, error.Value);
+            return new ScanRequest(id, createdDateTime, status, error);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static ScanRequest FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeScanRequest(document.RootElement);
         }
     }
 }

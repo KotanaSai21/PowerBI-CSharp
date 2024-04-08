@@ -50,7 +50,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(IdentityBlob))
             {
                 writer.WritePropertyName("identityBlob"u8);
-                writer.WriteObjectValue(IdentityBlob);
+                writer.WriteObjectValue<IdentityBlob>(IdentityBlob);
             }
             if (Optional.IsCollectionDefined(Reports))
             {
@@ -63,6 +63,14 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteEndArray();
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<EffectiveIdentity>(this);
+            return content;
         }
     }
 }

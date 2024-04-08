@@ -52,7 +52,27 @@ namespace Microsoft.PowerBI.Api.Models
             upstreamDataflows ??= new List<DependentDataflow>();
             users ??= new List<DatasetUser>();
 
-            return new Dataset(id, name, configuredBy, createdDate, contentProviderType, description, upstreamDataflows?.ToList(), queryScaleOutSettings, createReportEmbedURL, qnaEmbedURL, webUrl, isEffectiveIdentityRequired, isEffectiveIdentityRolesRequired, isOnPremGatewayRequired, encryption, users?.ToList(), addRowsAPIEnabled, isRefreshable, isInPlaceSharingEnabled, targetStorageMode);
+            return new Dataset(
+                id,
+                name,
+                configuredBy,
+                createdDate,
+                contentProviderType,
+                description,
+                upstreamDataflows?.ToList(),
+                queryScaleOutSettings,
+                createReportEmbedURL,
+                qnaEmbedURL,
+                webUrl,
+                isEffectiveIdentityRequired,
+                isEffectiveIdentityRolesRequired,
+                isOnPremGatewayRequired,
+                encryption,
+                users?.ToList(),
+                addRowsAPIEnabled,
+                isRefreshable,
+                isInPlaceSharingEnabled,
+                targetStorageMode);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.DatasetExecuteQueriesResponse"/>. </summary>
@@ -147,7 +167,14 @@ namespace Microsoft.PowerBI.Api.Models
         {
             refreshAttempts ??= new List<RefreshAttempt>();
 
-            return new Refresh(refreshType, startTime, endTime, serviceExceptionJson, status, requestId, refreshAttempts?.ToList());
+            return new Refresh(
+                refreshType,
+                startTime,
+                endTime,
+                serviceExceptionJson,
+                status,
+                requestId,
+                refreshAttempts?.ToList());
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.RefreshAttempt"/>. </summary>
@@ -181,7 +208,18 @@ namespace Microsoft.PowerBI.Api.Models
             messages ??= new List<EngineMessage>();
             refreshAttempts ??= new List<RefreshAttempt>();
 
-            return new DatasetRefreshDetail(startTime, endTime, type, commitMode, status, extendedStatus, currentRefreshType, numberOfAttempts, objects?.ToList(), messages?.ToList(), refreshAttempts?.ToList());
+            return new DatasetRefreshDetail(
+                startTime,
+                endTime,
+                type,
+                commitMode,
+                status,
+                extendedStatus,
+                currentRefreshType,
+                numberOfAttempts,
+                objects?.ToList(),
+                messages?.ToList(),
+                refreshAttempts?.ToList());
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.EngineMessage"/>. </summary>
@@ -274,7 +312,14 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.GatewayDatasource"/> instance for mocking. </returns>
         public static GatewayDatasource GatewayDatasource(Guid id = default, Guid gatewayId = default, string datasourceName = null, string datasourceType = null, string connectionDetails = null, CredentialType credentialType = default, GatewayDatasourceCredentialDetails credentialDetails = null)
         {
-            return new GatewayDatasource(id, gatewayId, datasourceName, datasourceType, connectionDetails, credentialType, credentialDetails);
+            return new GatewayDatasource(
+                id,
+                gatewayId,
+                datasourceName,
+                datasourceType,
+                connectionDetails,
+                credentialType,
+                credentialDetails);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.GatewayDatasourceCredentialDetails"/>. </summary>
@@ -306,7 +351,13 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.Gateway"/> instance for mocking. </returns>
         public static Gateway Gateway(Guid id = default, string name = null, string type = null, string gatewayAnnotation = null, GatewayPublicKey publicKey = null, string gatewayStatus = null)
         {
-            return new Gateway(id, name, type, gatewayAnnotation, publicKey, gatewayStatus);
+            return new Gateway(
+                id,
+                name,
+                type,
+                gatewayAnnotation,
+                publicKey,
+                gatewayStatus);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.GatewayPublicKey"/>. </summary>
@@ -332,7 +383,17 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.DatasetQueryScaleOutSyncStatus"/> instance for mocking. </returns>
         public static DatasetQueryScaleOutSyncStatus DatasetQueryScaleOutSyncStatus(long? commitVersion = null, DateTimeOffset? commitTimestamp = null, long? targetSyncVersion = null, DateTimeOffset? targetSyncTimestamp = null, QueryScaleOutSyncTriggerReason? triggerReason = null, DateTimeOffset? syncStartTime = null, DateTimeOffset? syncEndTime = null, long? minActiveReadVersion = null, DateTimeOffset? minActiveReadTimestamp = null, QueryScaleOutStatus? scaleOutStatus = null)
         {
-            return new DatasetQueryScaleOutSyncStatus(commitVersion, commitTimestamp, targetSyncVersion, targetSyncTimestamp, triggerReason, syncStartTime, syncEndTime, minActiveReadVersion, minActiveReadTimestamp, scaleOutStatus);
+            return new DatasetQueryScaleOutSyncStatus(
+                commitVersion,
+                commitTimestamp,
+                targetSyncVersion,
+                targetSyncTimestamp,
+                triggerReason,
+                syncStartTime,
+                syncEndTime,
+                minActiveReadVersion,
+                minActiveReadTimestamp,
+                scaleOutStatus);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.DatasetUsersAccess"/>. </summary>
@@ -371,7 +432,14 @@ namespace Microsoft.PowerBI.Api.Models
             reports ??= new List<Report>();
             datasets ??= new List<Dataset>();
 
-            return new Import(id, name, importState, reports?.ToList(), datasets?.ToList(), createdDateTime, updatedDateTime);
+            return new Import(
+                id,
+                name,
+                importState,
+                reports?.ToList(),
+                datasets?.ToList(),
+                createdDateTime,
+                updatedDateTime);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.TemporaryUploadLocation"/>. </summary>
@@ -435,7 +503,17 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.Export"/> instance for mocking. </returns>
         public static Export Export(string id = null, DateTimeOffset? createdDateTime = null, DateTimeOffset? lastActionDateTime = null, Guid? reportId = null, string reportName = null, ExportState? status = null, int? percentComplete = null, string resourceLocation = null, string resourceFileExtension = null, DateTimeOffset? expirationTime = null)
         {
-            return new Export(id, createdDateTime, lastActionDateTime, reportId, reportName, status, percentComplete, resourceLocation, resourceFileExtension, expirationTime);
+            return new Export(
+                id,
+                createdDateTime,
+                lastActionDateTime,
+                reportId,
+                reportName,
+                status,
+                percentComplete,
+                resourceLocation,
+                resourceFileExtension,
+                expirationTime);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.Dashboards"/>. </summary>
@@ -644,7 +722,16 @@ namespace Microsoft.PowerBI.Api.Models
         {
             admins ??= new List<string>();
 
-            return new Capacity(id, displayName, admins?.ToList(), sku, state, capacityUserAccessRight, region, tenantKeyId, tenantKey);
+            return new Capacity(
+                id,
+                displayName,
+                admins?.ToList(),
+                sku,
+                state,
+                capacityUserAccessRight,
+                region,
+                tenantKeyId,
+                tenantKey);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.TenantKey"/>. </summary>
@@ -657,7 +744,13 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.TenantKey"/> instance for mocking. </returns>
         public static TenantKey TenantKey(Guid? id = null, string name = null, string keyVaultKeyIdentifier = null, bool? isDefault = null, DateTimeOffset? createdAt = null, DateTimeOffset? updatedAt = null)
         {
-            return new TenantKey(id, name, keyVaultKeyIdentifier, isDefault, createdAt, updatedAt);
+            return new TenantKey(
+                id,
+                name,
+                keyVaultKeyIdentifier,
+                isDefault,
+                createdAt,
+                updatedAt);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.Workloads"/>. </summary>
@@ -713,7 +806,22 @@ namespace Microsoft.PowerBI.Api.Models
         {
             configuredBy ??= new List<string>();
 
-            return new Refreshable(id, name, kind, startTime, endTime, refreshCount, refreshFailures, averageDuration, medianDuration, refreshesPerDay, lastRefresh, refreshSchedule, configuredBy?.ToList(), capacity, group);
+            return new Refreshable(
+                id,
+                name,
+                kind,
+                startTime,
+                endTime,
+                refreshCount,
+                refreshFailures,
+                averageDuration,
+                medianDuration,
+                refreshesPerDay,
+                lastRefresh,
+                refreshSchedule,
+                configuredBy?.ToList(),
+                capacity,
+                group);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.WorkspaceCapacityAssignmentStatus"/>. </summary>
@@ -944,7 +1052,19 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.PipelineOperation"/> instance for mocking. </returns>
         public static PipelineOperation PipelineOperation(Guid id = default, PipelineOperationType? type = null, PipelineOperationStatus status = default, DateTimeOffset lastUpdatedTime = default, DateTimeOffset? executionStartTime = null, DateTimeOffset? executionEndTime = null, int? sourceStageOrder = null, int? targetStageOrder = null, PipelineOperationUser performedBy = null, PipelineOperationNote note = null, DeploymentExecutionPlan executionPlan = null, PreDeploymentDiffInformation preDeploymentDiffInformation = null)
         {
-            return new PipelineOperation(id, type, status, lastUpdatedTime, executionStartTime, executionEndTime, sourceStageOrder, targetStageOrder, performedBy, note, executionPlan, preDeploymentDiffInformation);
+            return new PipelineOperation(
+                id,
+                type,
+                status,
+                lastUpdatedTime,
+                executionStartTime,
+                executionEndTime,
+                sourceStageOrder,
+                targetStageOrder,
+                performedBy,
+                note,
+                executionPlan,
+                preDeploymentDiffInformation);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.PipelineOperationUser"/>. </summary>
@@ -992,7 +1112,13 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.DeploymentExecutionStep"/> instance for mocking. </returns>
         public static DeploymentExecutionStep DeploymentExecutionStep(int index = default, DeploymentStepType type = default, PipelineOperationStatus status = default, DeploymentExecutionStepPreDeploymentDiffState? preDeploymentDiffState = null, DeploymentSourceAndTarget sourceAndTarget = null, DeploymentError error = null)
         {
-            return new DeploymentExecutionStep(index, type, status, preDeploymentDiffState, sourceAndTarget, error);
+            return new DeploymentExecutionStep(
+                index,
+                type,
+                status,
+                preDeploymentDiffState,
+                sourceAndTarget,
+                error);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.DeploymentSourceAndTarget"/>. </summary>
@@ -1108,7 +1234,22 @@ namespace Microsoft.PowerBI.Api.Models
             datamarts ??= new List<WorkspaceInfoDatamart>();
             users ??= new List<GroupUser>();
 
-            return new WorkspaceInfo(id, name, description, type, state, dataRetrievalState, isOnDedicatedCapacity, capacityId, defaultDatasetStorageFormat, reports?.ToList(), dashboards?.ToList(), datasets?.ToList(), dataflows?.ToList(), datamarts?.ToList(), users?.ToList());
+            return new WorkspaceInfo(
+                id,
+                name,
+                description,
+                type,
+                state,
+                dataRetrievalState,
+                isOnDedicatedCapacity,
+                capacityId,
+                defaultDatasetStorageFormat,
+                reports?.ToList(),
+                dashboards?.ToList(),
+                datasets?.ToList(),
+                dataflows?.ToList(),
+                datamarts?.ToList(),
+                users?.ToList());
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.WorkspaceInfoDatamart"/>. </summary>
@@ -1138,7 +1279,25 @@ namespace Microsoft.PowerBI.Api.Models
             datasourceUsages ??= new List<DatasourceUsage>();
             users ??= new List<DatamartUser>();
 
-            return new WorkspaceInfoDatamart(id, name, description, type, status, state, suspendedBatchId, endorsementDetails, sensitivityLabel, modifiedBy, modifiedDateTime, configuredBy, modifiedById, configuredById, upstreamDataflows?.ToList(), upstreamDatamarts?.ToList(), datasourceUsages?.ToList(), users?.ToList());
+            return new WorkspaceInfoDatamart(
+                id,
+                name,
+                description,
+                type,
+                status,
+                state,
+                suspendedBatchId,
+                endorsementDetails,
+                sensitivityLabel,
+                modifiedBy,
+                modifiedDateTime,
+                configuredBy,
+                modifiedById,
+                configuredById,
+                upstreamDataflows?.ToList(),
+                upstreamDatamarts?.ToList(),
+                datasourceUsages?.ToList(),
+                users?.ToList());
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.DatamartBaseProperties"/>. </summary>
@@ -1152,7 +1311,14 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.DatamartBaseProperties"/> instance for mocking. </returns>
         public static DatamartBaseProperties DatamartBaseProperties(Guid id = default, string name = null, string description = null, DatamartType? type = null, DatamartStatus? status = null, DatamartState? state = null, string suspendedBatchId = null)
         {
-            return new DatamartBaseProperties(id, name, description, type, status, state, suspendedBatchId);
+            return new DatamartBaseProperties(
+                id,
+                name,
+                description,
+                type,
+                status,
+                state,
+                suspendedBatchId);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.DatamartEndorsmentProperties"/>. </summary>
@@ -1269,7 +1435,28 @@ namespace Microsoft.PowerBI.Api.Models
             upstreamDataflows ??= new List<DependentDataflow>();
             users ??= new List<DatasetUser>();
 
-            return new AdminDataset(id, name, configuredBy, createdDate, contentProviderType, description, upstreamDataflows?.ToList(), queryScaleOutSettings, createReportEmbedURL, qnaEmbedURL, webUrl, isEffectiveIdentityRequired, isEffectiveIdentityRolesRequired, isOnPremGatewayRequired, encryption, users?.ToList(), addRowsAPIEnabled, isRefreshable, isInPlaceSharingEnabled, targetStorageMode, workspaceId);
+            return new AdminDataset(
+                id,
+                name,
+                configuredBy,
+                createdDate,
+                contentProviderType,
+                description,
+                upstreamDataflows?.ToList(),
+                queryScaleOutSettings,
+                createReportEmbedURL,
+                qnaEmbedURL,
+                webUrl,
+                isEffectiveIdentityRequired,
+                isEffectiveIdentityRolesRequired,
+                isOnPremGatewayRequired,
+                encryption,
+                users?.ToList(),
+                addRowsAPIEnabled,
+                isRefreshable,
+                isInPlaceSharingEnabled,
+                targetStorageMode,
+                workspaceId);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.DatasetUsers"/>. </summary>
@@ -1338,7 +1525,13 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.UnusedArtifactEntity"/> instance for mocking. </returns>
         public static UnusedArtifactEntity UnusedArtifactEntity(string artifactId = null, string displayName = null, string artifactType = null, int? artifactSizeInMB = null, DateTimeOffset? createdDateTime = null, DateTimeOffset? lastAccessedDateTime = null)
         {
-            return new UnusedArtifactEntity(artifactId, displayName, artifactType, artifactSizeInMB, createdDateTime, lastAccessedDateTime);
+            return new UnusedArtifactEntity(
+                artifactId,
+                displayName,
+                artifactType,
+                artifactSizeInMB,
+                createdDateTime,
+                lastAccessedDateTime);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.ReportUsers"/>. </summary>
@@ -1408,7 +1601,13 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.ArtifactAccessEntry"/> instance for mocking. </returns>
         public static ArtifactAccessEntry ArtifactAccessEntry(string artifactId = null, string displayName = null, ArtifactType artifactType = default, string accessRight = null, string shareType = null, User sharer = null)
         {
-            return new ArtifactAccessEntry(artifactId, displayName, artifactType, accessRight, shareType, sharer);
+            return new ArtifactAccessEntry(
+                artifactId,
+                displayName,
+                artifactType,
+                accessRight,
+                shareType,
+                sharer);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.TenantKeys"/>. </summary>
@@ -1476,7 +1675,13 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.AdminApp"/> instance for mocking. </returns>
         public static AdminApp AdminApp(Guid id = default, string name = null, string description = null, DateTimeOffset? lastUpdate = null, string publishedBy = null, string workspaceId = null)
         {
-            return new AdminApp(id, name, description, lastUpdate, publishedBy, workspaceId);
+            return new AdminApp(
+                id,
+                name,
+                description,
+                lastUpdate,
+                publishedBy,
+                workspaceId);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.AppUsers"/>. </summary>
@@ -1500,7 +1705,13 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.AppUser"/> instance for mocking. </returns>
         public static AppUser AppUser(AppUserAccessRight appUserAccessRight = default, string emailAddress = null, string displayName = null, string identifier = null, string graphId = null, PrincipalType? principalType = null)
         {
-            return new AppUser(appUserAccessRight, emailAddress, displayName, identifier, graphId, principalType);
+            return new AppUser(
+                appUserAccessRight,
+                emailAddress,
+                displayName,
+                identifier,
+                graphId,
+                principalType);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.SubscriptionsByUserResponse"/>. </summary>
@@ -1714,7 +1925,13 @@ namespace Microsoft.PowerBI.Api.Models
         /// <returns> A new <see cref="Models.GoalRefreshHistory"/> instance for mocking. </returns>
         public static GoalRefreshHistory GoalRefreshHistory(Guid? goalId = null, GoalValueType? connectionType = null, GoalProcessingStatus? status = null, DateTimeOffset? timestamp = null, Guid? rootActivityId = null, string message = null)
         {
-            return new GoalRefreshHistory(goalId, connectionType, status, timestamp, rootActivityId, message);
+            return new GoalRefreshHistory(
+                goalId,
+                connectionType,
+                status,
+                timestamp,
+                rootActivityId,
+                message);
         }
     }
 }

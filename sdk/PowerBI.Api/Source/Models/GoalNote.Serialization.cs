@@ -7,6 +7,7 @@
 
 using System;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -65,14 +66,14 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<Guid> id = default;
-            Optional<DateTimeOffset> valueTimestamp = default;
-            Optional<Guid> goalId = default;
-            Optional<Guid> scorecardId = default;
-            Optional<DateTimeOffset> lastModifiedTime = default;
-            Optional<string> content = default;
-            Optional<DateTimeOffset> createdTime = default;
-            Optional<string> body = default;
+            Guid? id = default;
+            DateTimeOffset? valueTimestamp = default;
+            Guid? goalId = default;
+            Guid? scorecardId = default;
+            DateTimeOffset? lastModifiedTime = default;
+            string content = default;
+            DateTimeOffset? createdTime = default;
+            string body = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -140,7 +141,31 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new GoalNote(Optional.ToNullable(id), Optional.ToNullable(valueTimestamp), Optional.ToNullable(goalId), Optional.ToNullable(scorecardId), Optional.ToNullable(lastModifiedTime), content.Value, Optional.ToNullable(createdTime), body.Value);
+            return new GoalNote(
+                id,
+                valueTimestamp,
+                goalId,
+                scorecardId,
+                lastModifiedTime,
+                content,
+                createdTime,
+                body);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static GoalNote FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeGoalNote(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<GoalNote>(this);
+            return content;
         }
     }
 }

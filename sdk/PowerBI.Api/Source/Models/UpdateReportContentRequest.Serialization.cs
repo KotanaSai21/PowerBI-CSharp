@@ -18,8 +18,16 @@ namespace Microsoft.PowerBI.Api.Models
             writer.WritePropertyName("sourceType"u8);
             writer.WriteStringValue(SourceType.ToString());
             writer.WritePropertyName("sourceReport"u8);
-            writer.WriteObjectValue(SourceReport);
+            writer.WriteObjectValue<SourceReport>(SourceReport);
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<UpdateReportContentRequest>(this);
+            return content;
         }
     }
 }

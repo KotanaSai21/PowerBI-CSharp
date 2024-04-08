@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,11 +19,11 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IReadOnlyList<PipelineStageDataset>> datasets = default;
-            Optional<IReadOnlyList<PipelineStageReport>> reports = default;
-            Optional<IReadOnlyList<PipelineStageDashboard>> dashboards = default;
-            Optional<IReadOnlyList<PipelineStageDataflow>> dataflows = default;
-            Optional<IReadOnlyList<PipelineStageDatamart>> datamarts = default;
+            IReadOnlyList<PipelineStageDataset> datasets = default;
+            IReadOnlyList<PipelineStageReport> reports = default;
+            IReadOnlyList<PipelineStageDashboard> dashboards = default;
+            IReadOnlyList<PipelineStageDataflow> dataflows = default;
+            IReadOnlyList<PipelineStageDatamart> datamarts = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("datasets"u8))
@@ -97,7 +97,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new PipelineStageArtifacts(Optional.ToList(datasets), Optional.ToList(reports), Optional.ToList(dashboards), Optional.ToList(dataflows), Optional.ToList(datamarts));
+            return new PipelineStageArtifacts(datasets ?? new ChangeTrackingList<PipelineStageDataset>(), reports ?? new ChangeTrackingList<PipelineStageReport>(), dashboards ?? new ChangeTrackingList<PipelineStageDashboard>(), dataflows ?? new ChangeTrackingList<PipelineStageDataflow>(), datamarts ?? new ChangeTrackingList<PipelineStageDatamart>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static PipelineStageArtifacts FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePipelineStageArtifacts(document.RootElement);
         }
     }
 }

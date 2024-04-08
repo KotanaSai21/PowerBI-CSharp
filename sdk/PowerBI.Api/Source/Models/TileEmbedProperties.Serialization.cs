@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -34,8 +35,8 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> embedUrl = default;
-            Optional<string> embedData = default;
+            string embedUrl = default;
+            string embedData = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("embedUrl"u8))
@@ -49,7 +50,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new TileEmbedProperties(embedUrl.Value, embedData.Value);
+            return new TileEmbedProperties(embedUrl, embedData);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static TileEmbedProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeTileEmbedProperties(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<TileEmbedProperties>(this);
+            return content;
         }
     }
 }

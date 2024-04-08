@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,8 +19,8 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> userPrincipalName = default;
-            Optional<Guid> principalObjectID = default;
+            string userPrincipalName = default;
+            Guid? principalObjectID = default;
             PrincipalType principalType = default;
             foreach (var property in element.EnumerateObject())
             {
@@ -44,7 +44,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new PipelineOperationUser(userPrincipalName.Value, Optional.ToNullable(principalObjectID), principalType);
+            return new PipelineOperationUser(userPrincipalName, principalObjectID, principalType);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static PipelineOperationUser FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePipelineOperationUser(document.RootElement);
         }
     }
 }

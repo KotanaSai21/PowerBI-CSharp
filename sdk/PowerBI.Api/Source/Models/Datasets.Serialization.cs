@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,8 +19,8 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> odataContext = default;
-            Optional<IReadOnlyList<Dataset>> value = default;
+            string odataContext = default;
+            IReadOnlyList<Dataset> value = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("odata.context"u8))
@@ -43,7 +43,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Datasets(odataContext.Value, Optional.ToList(value));
+            return new Datasets(odataContext, value ?? new ChangeTrackingList<Dataset>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Datasets FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasets(document.RootElement);
         }
     }
 }

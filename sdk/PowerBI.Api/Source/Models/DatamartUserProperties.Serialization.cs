@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,7 +19,7 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IReadOnlyList<DatamartUser>> users = default;
+            IReadOnlyList<DatamartUser> users = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("users"u8))
@@ -37,7 +37,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatamartUserProperties(Optional.ToList(users));
+            return new DatamartUserProperties(users ?? new ChangeTrackingList<DatamartUser>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatamartUserProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatamartUserProperties(document.RootElement);
         }
     }
 }

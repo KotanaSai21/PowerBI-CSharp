@@ -19,13 +19,13 @@ namespace Microsoft.PowerBI.Api.Models
             writer.WriteStartArray();
             foreach (var item in Queries)
             {
-                writer.WriteObjectValue(item);
+                writer.WriteObjectValue<DatasetExecuteQueriesQuery>(item);
             }
             writer.WriteEndArray();
             if (Optional.IsDefined(SerializerSettings))
             {
                 writer.WritePropertyName("serializerSettings"u8);
-                writer.WriteObjectValue(SerializerSettings);
+                writer.WriteObjectValue<DatasetExecuteQueriesSerializationSettings>(SerializerSettings);
             }
             if (Optional.IsDefined(ImpersonatedUserName))
             {
@@ -33,6 +33,14 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStringValue(ImpersonatedUserName);
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DatasetExecuteQueriesRequest>(this);
+            return content;
         }
     }
 }

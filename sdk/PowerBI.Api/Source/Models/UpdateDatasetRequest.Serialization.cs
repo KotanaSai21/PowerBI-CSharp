@@ -23,9 +23,17 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(QueryScaleOutSettings))
             {
                 writer.WritePropertyName("queryScaleOutSettings"u8);
-                writer.WriteObjectValue(QueryScaleOutSettings);
+                writer.WriteObjectValue<DatasetQueryScaleOutSettings>(QueryScaleOutSettings);
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<UpdateDatasetRequest>(this);
+            return content;
         }
     }
 }

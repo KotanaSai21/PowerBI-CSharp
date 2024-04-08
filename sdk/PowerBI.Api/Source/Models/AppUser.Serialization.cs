@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,11 +19,11 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             AppUserAccessRight appUserAccessRight = default;
-            Optional<string> emailAddress = default;
-            Optional<string> displayName = default;
-            Optional<string> identifier = default;
-            Optional<string> graphId = default;
-            Optional<PrincipalType> principalType = default;
+            string emailAddress = default;
+            string displayName = default;
+            string identifier = default;
+            string graphId = default;
+            PrincipalType? principalType = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("appUserAccessRight"u8))
@@ -61,7 +61,21 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new AppUser(appUserAccessRight, emailAddress.Value, displayName.Value, identifier.Value, graphId.Value, Optional.ToNullable(principalType));
+            return new AppUser(
+                appUserAccessRight,
+                emailAddress,
+                displayName,
+                identifier,
+                graphId,
+                principalType);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static AppUser FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeAppUser(document.RootElement);
         }
     }
 }

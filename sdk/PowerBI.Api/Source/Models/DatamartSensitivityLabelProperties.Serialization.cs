@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -18,7 +18,7 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<SensitivityLabel> sensitivityLabel = default;
+            SensitivityLabel sensitivityLabel = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("sensitivityLabel"u8))
@@ -31,7 +31,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatamartSensitivityLabelProperties(sensitivityLabel.Value);
+            return new DatamartSensitivityLabelProperties(sensitivityLabel);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatamartSensitivityLabelProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatamartSensitivityLabelProperties(document.RootElement);
         }
     }
 }

@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -50,7 +51,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in UpstreamDataflows)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<DependentDataflow>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -64,12 +65,12 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             string id = default;
-            Optional<string> name = default;
-            Optional<string> configuredBy = default;
-            Optional<DateTimeOffset> createdDate = default;
-            Optional<string> contentProviderType = default;
-            Optional<string> description = default;
-            Optional<IList<DependentDataflow>> upstreamDataflows = default;
+            string name = default;
+            string configuredBy = default;
+            DateTimeOffset? createdDate = default;
+            string contentProviderType = default;
+            string description = default;
+            IList<DependentDataflow> upstreamDataflows = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -121,7 +122,30 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasetBaseProperties(id, name.Value, configuredBy.Value, Optional.ToNullable(createdDate), contentProviderType.Value, description.Value, Optional.ToList(upstreamDataflows));
+            return new DatasetBaseProperties(
+                id,
+                name,
+                configuredBy,
+                createdDate,
+                contentProviderType,
+                description,
+                upstreamDataflows ?? new ChangeTrackingList<DependentDataflow>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasetBaseProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasetBaseProperties(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DatasetBaseProperties>(this);
+            return content;
         }
     }
 }

@@ -16,13 +16,13 @@ namespace Microsoft.PowerBI.Api.Models
         {
             writer.WriteStartObject();
             writer.WritePropertyName("artifacts"u8);
-            writer.WriteObjectValue(Artifacts);
+            writer.WriteObjectValue<InformationProtectionArtifactsChangeLabel>(Artifacts);
             writer.WritePropertyName("labelId"u8);
             writer.WriteStringValue(LabelId);
             if (Optional.IsDefined(DelegatedUser))
             {
                 writer.WritePropertyName("delegatedUser"u8);
-                writer.WriteObjectValue(DelegatedUser);
+                writer.WriteObjectValue<DelegatedUser>(DelegatedUser);
             }
             if (Optional.IsDefined(AssignmentMethod))
             {
@@ -30,6 +30,14 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStringValue(AssignmentMethod.Value.ToSerialString());
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<InformationProtectionChangeLabelDetails>(this);
+            return content;
         }
     }
 }

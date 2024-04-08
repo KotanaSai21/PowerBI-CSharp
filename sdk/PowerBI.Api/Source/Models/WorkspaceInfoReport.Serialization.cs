@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -50,12 +51,12 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(EndorsementDetails))
             {
                 writer.WritePropertyName("endorsementDetails"u8);
-                writer.WriteObjectValue(EndorsementDetails);
+                writer.WriteObjectValue<EndorsementDetails>(EndorsementDetails);
             }
             if (Optional.IsDefined(SensitivityLabel))
             {
                 writer.WritePropertyName("sensitivityLabel"u8);
-                writer.WriteObjectValue(SensitivityLabel);
+                writer.WriteObjectValue<SensitivityLabel>(SensitivityLabel);
             }
             if (Optional.IsCollectionDefined(Users))
             {
@@ -63,7 +64,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<ReportUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -113,23 +114,23 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> createdBy = default;
-            Optional<string> modifiedBy = default;
-            Optional<DateTimeOffset> createdDateTime = default;
-            Optional<DateTimeOffset> modifiedDateTime = default;
-            Optional<string> createdById = default;
-            Optional<string> modifiedById = default;
-            Optional<EndorsementDetails> endorsementDetails = default;
-            Optional<SensitivityLabel> sensitivityLabel = default;
-            Optional<IList<ReportUser>> users = default;
-            Optional<Guid> datasetWorkspaceId = default;
+            string createdBy = default;
+            string modifiedBy = default;
+            DateTimeOffset? createdDateTime = default;
+            DateTimeOffset? modifiedDateTime = default;
+            string createdById = default;
+            string modifiedById = default;
+            EndorsementDetails endorsementDetails = default;
+            SensitivityLabel sensitivityLabel = default;
+            IList<ReportUser> users = default;
+            Guid? datasetWorkspaceId = default;
             Guid id = default;
-            Optional<string> name = default;
-            Optional<string> datasetId = default;
-            Optional<string> appId = default;
-            Optional<string> description = default;
-            Optional<ReportBasePropertiesReportType> reportType = default;
-            Optional<Guid> originalReportId = default;
+            string name = default;
+            string datasetId = default;
+            string appId = default;
+            string description = default;
+            ReportBasePropertiesReportType? reportType = default;
+            Guid? originalReportId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("createdBy"u8))
@@ -255,7 +256,40 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new WorkspaceInfoReport(id, name.Value, datasetId.Value, appId.Value, description.Value, Optional.ToNullable(reportType), Optional.ToNullable(originalReportId), createdBy.Value, modifiedBy.Value, Optional.ToNullable(createdDateTime), Optional.ToNullable(modifiedDateTime), createdById.Value, modifiedById.Value, endorsementDetails.Value, sensitivityLabel.Value, Optional.ToList(users), Optional.ToNullable(datasetWorkspaceId));
+            return new WorkspaceInfoReport(
+                id,
+                name,
+                datasetId,
+                appId,
+                description,
+                reportType,
+                originalReportId,
+                createdBy,
+                modifiedBy,
+                createdDateTime,
+                modifiedDateTime,
+                createdById,
+                modifiedById,
+                endorsementDetails,
+                sensitivityLabel,
+                users ?? new ChangeTrackingList<ReportUser>(),
+                datasetWorkspaceId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new WorkspaceInfoReport FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorkspaceInfoReport(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<WorkspaceInfoReport>(this);
+            return content;
         }
     }
 }

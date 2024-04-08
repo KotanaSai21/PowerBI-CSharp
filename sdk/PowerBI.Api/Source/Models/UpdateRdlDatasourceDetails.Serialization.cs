@@ -16,10 +16,18 @@ namespace Microsoft.PowerBI.Api.Models
         {
             writer.WriteStartObject();
             writer.WritePropertyName("connectionDetails"u8);
-            writer.WriteObjectValue(ConnectionDetails);
+            writer.WriteObjectValue<RdlDatasourceConnectionDetails>(ConnectionDetails);
             writer.WritePropertyName("datasourceName"u8);
             writer.WriteStringValue(DatasourceName);
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<UpdateRdlDatasourceDetails>(this);
+            return content;
         }
     }
 }

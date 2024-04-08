@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -20,17 +20,17 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid id = default;
-            Optional<PipelineOperationType> type = default;
+            PipelineOperationType? type = default;
             PipelineOperationStatus status = default;
             DateTimeOffset lastUpdatedTime = default;
-            Optional<DateTimeOffset> executionStartTime = default;
-            Optional<DateTimeOffset> executionEndTime = default;
-            Optional<int> sourceStageOrder = default;
-            Optional<int> targetStageOrder = default;
-            Optional<PipelineOperationUser> performedBy = default;
-            Optional<PipelineOperationNote> note = default;
-            Optional<DeploymentExecutionPlan> executionPlan = default;
-            Optional<PreDeploymentDiffInformation> preDeploymentDiffInformation = default;
+            DateTimeOffset? executionStartTime = default;
+            DateTimeOffset? executionEndTime = default;
+            int? sourceStageOrder = default;
+            int? targetStageOrder = default;
+            PipelineOperationUser performedBy = default;
+            PipelineOperationNote note = default;
+            DeploymentExecutionPlan executionPlan = default;
+            PreDeploymentDiffInformation preDeploymentDiffInformation = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -130,7 +130,27 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new PipelineOperation(id, Optional.ToNullable(type), status, lastUpdatedTime, Optional.ToNullable(executionStartTime), Optional.ToNullable(executionEndTime), Optional.ToNullable(sourceStageOrder), Optional.ToNullable(targetStageOrder), performedBy.Value, note.Value, executionPlan.Value, preDeploymentDiffInformation.Value);
+            return new PipelineOperation(
+                id,
+                type,
+                status,
+                lastUpdatedTime,
+                executionStartTime,
+                executionEndTime,
+                sourceStageOrder,
+                targetStageOrder,
+                performedBy,
+                note,
+                executionPlan,
+                preDeploymentDiffInformation);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static PipelineOperation FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePipelineOperation(document.RootElement);
         }
     }
 }

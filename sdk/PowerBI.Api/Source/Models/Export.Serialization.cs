@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,16 +19,16 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> id = default;
-            Optional<DateTimeOffset> createdDateTime = default;
-            Optional<DateTimeOffset> lastActionDateTime = default;
-            Optional<Guid> reportId = default;
-            Optional<string> reportName = default;
-            Optional<ExportState> status = default;
-            Optional<int> percentComplete = default;
-            Optional<string> resourceLocation = default;
-            Optional<string> resourceFileExtension = default;
-            Optional<DateTimeOffset> expirationTime = default;
+            string id = default;
+            DateTimeOffset? createdDateTime = default;
+            DateTimeOffset? lastActionDateTime = default;
+            Guid? reportId = default;
+            string reportName = default;
+            ExportState? status = default;
+            int? percentComplete = default;
+            string resourceLocation = default;
+            string resourceFileExtension = default;
+            DateTimeOffset? expirationTime = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -106,7 +106,25 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Export(id.Value, Optional.ToNullable(createdDateTime), Optional.ToNullable(lastActionDateTime), Optional.ToNullable(reportId), reportName.Value, Optional.ToNullable(status), Optional.ToNullable(percentComplete), resourceLocation.Value, resourceFileExtension.Value, Optional.ToNullable(expirationTime));
+            return new Export(
+                id,
+                createdDateTime,
+                lastActionDateTime,
+                reportId,
+                reportName,
+                status,
+                percentComplete,
+                resourceLocation,
+                resourceFileExtension,
+                expirationTime);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Export FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeExport(document.RootElement);
         }
     }
 }

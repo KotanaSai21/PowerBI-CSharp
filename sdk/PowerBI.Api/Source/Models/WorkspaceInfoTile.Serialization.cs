@@ -7,6 +7,7 @@
 
 using System;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -47,11 +48,11 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<Guid> datasetWorkspaceId = default;
+            Guid? datasetWorkspaceId = default;
             Guid id = default;
-            Optional<string> title = default;
-            Optional<Guid> reportId = default;
-            Optional<string> datasetId = default;
+            string title = default;
+            Guid? reportId = default;
+            string datasetId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("datasetWorkspaceId"u8))
@@ -88,7 +89,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new WorkspaceInfoTile(id, title.Value, Optional.ToNullable(reportId), datasetId.Value, Optional.ToNullable(datasetWorkspaceId));
+            return new WorkspaceInfoTile(id, title, reportId, datasetId, datasetWorkspaceId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new WorkspaceInfoTile FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorkspaceInfoTile(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<WorkspaceInfoTile>(this);
+            return content;
         }
     }
 }

@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -25,12 +26,12 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(Members))
             {
                 writer.WritePropertyName("members"u8);
-                writer.WriteObjectValue(Members);
+                writer.WriteObjectValue<RoleMember>(Members);
             }
             if (Optional.IsDefined(TablePermissions))
             {
                 writer.WritePropertyName("tablePermissions"u8);
-                writer.WriteObjectValue(TablePermissions);
+                writer.WriteObjectValue<RoleTablePermission>(TablePermissions);
             }
             writer.WriteEndObject();
         }
@@ -42,9 +43,9 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             string name = default;
-            Optional<string> modelPermission = default;
-            Optional<RoleMember> members = default;
-            Optional<RoleTablePermission> tablePermissions = default;
+            string modelPermission = default;
+            RoleMember members = default;
+            RoleTablePermission tablePermissions = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("name"u8))
@@ -76,7 +77,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Role(name, modelPermission.Value, members.Value, tablePermissions.Value);
+            return new Role(name, modelPermission, members, tablePermissions);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Role FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeRole(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Role>(this);
+            return content;
         }
     }
 }

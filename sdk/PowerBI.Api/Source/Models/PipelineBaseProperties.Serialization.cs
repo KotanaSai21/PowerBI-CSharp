@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -21,9 +21,9 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid id = default;
-            Optional<string> displayName = default;
-            Optional<string> description = default;
-            Optional<IReadOnlyList<PipelineStage>> stages = default;
+            string displayName = default;
+            string description = default;
+            IReadOnlyList<PipelineStage> stages = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -56,7 +56,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new PipelineBaseProperties(id, displayName.Value, description.Value, Optional.ToList(stages));
+            return new PipelineBaseProperties(id, displayName, description, stages ?? new ChangeTrackingList<PipelineStage>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static PipelineBaseProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePipelineBaseProperties(document.RootElement);
         }
     }
 }

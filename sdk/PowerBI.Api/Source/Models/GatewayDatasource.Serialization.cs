@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -21,11 +21,11 @@ namespace Microsoft.PowerBI.Api.Models
             }
             Guid id = default;
             Guid gatewayId = default;
-            Optional<string> datasourceName = default;
-            Optional<string> datasourceType = default;
-            Optional<string> connectionDetails = default;
+            string datasourceName = default;
+            string datasourceType = default;
+            string connectionDetails = default;
             CredentialType credentialType = default;
-            Optional<GatewayDatasourceCredentialDetails> credentialDetails = default;
+            GatewayDatasourceCredentialDetails credentialDetails = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -68,7 +68,22 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new GatewayDatasource(id, gatewayId, datasourceName.Value, datasourceType.Value, connectionDetails.Value, credentialType, credentialDetails.Value);
+            return new GatewayDatasource(
+                id,
+                gatewayId,
+                datasourceName,
+                datasourceType,
+                connectionDetails,
+                credentialType,
+                credentialDetails);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static GatewayDatasource FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeGatewayDatasource(document.RootElement);
         }
     }
 }

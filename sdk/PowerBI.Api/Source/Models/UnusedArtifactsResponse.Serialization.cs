@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,9 +19,9 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<IReadOnlyList<UnusedArtifactEntity>> unusedArtifactEntities = default;
-            Optional<string> continuationUri = default;
-            Optional<string> continuationToken = default;
+            IReadOnlyList<UnusedArtifactEntity> unusedArtifactEntities = default;
+            string continuationUri = default;
+            string continuationToken = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("unusedArtifactEntities"u8))
@@ -49,7 +49,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new UnusedArtifactsResponse(Optional.ToList(unusedArtifactEntities), continuationUri.Value, continuationToken.Value);
+            return new UnusedArtifactsResponse(unusedArtifactEntities ?? new ChangeTrackingList<UnusedArtifactEntity>(), continuationUri, continuationToken);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static UnusedArtifactsResponse FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeUnusedArtifactsResponse(document.RootElement);
         }
     }
 }

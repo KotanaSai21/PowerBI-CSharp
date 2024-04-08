@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -21,12 +21,12 @@ namespace Microsoft.PowerBI.Api.Models
                 return null;
             }
             Guid id = default;
-            Optional<string> name = default;
-            Optional<ImportState> importState = default;
-            Optional<IReadOnlyList<Report>> reports = default;
-            Optional<IReadOnlyList<Dataset>> datasets = default;
-            Optional<DateTimeOffset> createdDateTime = default;
-            Optional<DateTimeOffset> updatedDateTime = default;
+            string name = default;
+            ImportState? importState = default;
+            IReadOnlyList<Report> reports = default;
+            IReadOnlyList<Dataset> datasets = default;
+            DateTimeOffset? createdDateTime = default;
+            DateTimeOffset? updatedDateTime = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -95,7 +95,22 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Import(id, name.Value, Optional.ToNullable(importState), Optional.ToList(reports), Optional.ToList(datasets), Optional.ToNullable(createdDateTime), Optional.ToNullable(updatedDateTime));
+            return new Import(
+                id,
+                name,
+                importState,
+                reports ?? new ChangeTrackingList<Report>(),
+                datasets ?? new ChangeTrackingList<Dataset>(),
+                createdDateTime,
+                updatedDateTime);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Import FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeImport(document.RootElement);
         }
     }
 }

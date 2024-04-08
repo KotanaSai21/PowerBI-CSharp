@@ -24,9 +24,17 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(Config))
             {
                 writer.WritePropertyName("config"u8);
-                writer.WriteObjectValue(Config);
+                writer.WriteObjectValue<TemplateAppConfigurationRequest>(Config);
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<TemplateAppInstallDetails>(this);
+            return content;
         }
     }
 }

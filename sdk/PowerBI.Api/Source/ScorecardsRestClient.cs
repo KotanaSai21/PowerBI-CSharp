@@ -129,7 +129,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(scorecard);
+            content.JsonWriter.WriteObjectValue<ScorecardCreateRequest>(scorecard);
             request.Content = content;
             return message;
         }
@@ -291,7 +291,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(scorecard);
+            content.JsonWriter.WriteObjectValue<Scorecard>(scorecard);
             request.Content = content;
             return message;
         }
@@ -512,7 +512,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(moveGoalsRequest);
+            content.JsonWriter.WriteObjectValue<GoalsMoveRequest>(moveGoalsRequest);
             request.Content = content;
             return message;
         }

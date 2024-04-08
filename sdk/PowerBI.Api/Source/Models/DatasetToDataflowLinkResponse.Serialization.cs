@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -18,9 +18,9 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> datasetObjectId = default;
-            Optional<string> dataflowObjectId = default;
-            Optional<string> workspaceObjectId = default;
+            string datasetObjectId = default;
+            string dataflowObjectId = default;
+            string workspaceObjectId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("datasetObjectId"u8))
@@ -39,7 +39,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasetToDataflowLinkResponse(datasetObjectId.Value, dataflowObjectId.Value, workspaceObjectId.Value);
+            return new DatasetToDataflowLinkResponse(datasetObjectId, dataflowObjectId, workspaceObjectId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasetToDataflowLinkResponse FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasetToDataflowLinkResponse(document.RootElement);
         }
     }
 }

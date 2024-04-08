@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -18,9 +18,9 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> name = default;
+            string name = default;
             WorkloadState state = default;
-            Optional<int> maxMemoryPercentageSetByUser = default;
+            int? maxMemoryPercentageSetByUser = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("name"u8))
@@ -43,7 +43,15 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Workload(name.Value, state, Optional.ToNullable(maxMemoryPercentageSetByUser));
+            return new Workload(name, state, maxMemoryPercentageSetByUser);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Workload FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorkload(document.RootElement);
         }
     }
 }

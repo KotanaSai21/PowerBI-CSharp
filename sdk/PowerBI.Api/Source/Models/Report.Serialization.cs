@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -33,7 +34,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Users)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<ReportUser>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -43,7 +44,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Subscriptions)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Subscription>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -88,17 +89,17 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> webUrl = default;
-            Optional<string> embedUrl = default;
-            Optional<IList<ReportUser>> users = default;
-            Optional<IList<Subscription>> subscriptions = default;
+            string webUrl = default;
+            string embedUrl = default;
+            IList<ReportUser> users = default;
+            IList<Subscription> subscriptions = default;
             Guid id = default;
-            Optional<string> name = default;
-            Optional<string> datasetId = default;
-            Optional<string> appId = default;
-            Optional<string> description = default;
-            Optional<ReportBasePropertiesReportType> reportType = default;
-            Optional<Guid> originalReportId = default;
+            string name = default;
+            string datasetId = default;
+            string appId = default;
+            string description = default;
+            ReportBasePropertiesReportType? reportType = default;
+            Guid? originalReportId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("webUrl"u8))
@@ -183,7 +184,34 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new Report(id, name.Value, datasetId.Value, appId.Value, description.Value, Optional.ToNullable(reportType), Optional.ToNullable(originalReportId), webUrl.Value, embedUrl.Value, Optional.ToList(users), Optional.ToList(subscriptions));
+            return new Report(
+                id,
+                name,
+                datasetId,
+                appId,
+                description,
+                reportType,
+                originalReportId,
+                webUrl,
+                embedUrl,
+                users ?? new ChangeTrackingList<ReportUser>(),
+                subscriptions ?? new ChangeTrackingList<Subscription>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new Report FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeReport(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal override RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<Report>(this);
+            return content;
         }
     }
 }

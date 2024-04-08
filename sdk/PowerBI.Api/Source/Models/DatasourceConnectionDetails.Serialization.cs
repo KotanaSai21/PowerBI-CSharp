@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -74,16 +75,16 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<string> server = default;
-            Optional<string> database = default;
-            Optional<string> url = default;
-            Optional<string> path = default;
-            Optional<string> kind = default;
-            Optional<string> account = default;
-            Optional<string> domain = default;
-            Optional<string> emailAddress = default;
-            Optional<string> loginServer = default;
-            Optional<string> classInfo = default;
+            string server = default;
+            string database = default;
+            string url = default;
+            string path = default;
+            string kind = default;
+            string account = default;
+            string domain = default;
+            string emailAddress = default;
+            string loginServer = default;
+            string classInfo = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("server"u8))
@@ -137,7 +138,33 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasourceConnectionDetails(server.Value, database.Value, url.Value, path.Value, kind.Value, account.Value, domain.Value, emailAddress.Value, loginServer.Value, classInfo.Value);
+            return new DatasourceConnectionDetails(
+                server,
+                database,
+                url,
+                path,
+                kind,
+                account,
+                domain,
+                emailAddress,
+                loginServer,
+                classInfo);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasourceConnectionDetails FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasourceConnectionDetails(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DatasourceConnectionDetails>(this);
+            return content;
         }
     }
 }

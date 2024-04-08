@@ -18,8 +18,16 @@ namespace Microsoft.PowerBI.Api.Models
             writer.WritePropertyName("datasourceType"u8);
             writer.WriteStringValue(DatasourceType);
             writer.WritePropertyName("connectionDetails"u8);
-            writer.WriteObjectValue(ConnectionDetails);
+            writer.WriteObjectValue<DatasourceConnectionDetails>(ConnectionDetails);
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DatasourceSelector>(this);
+            return content;
         }
     }
 }

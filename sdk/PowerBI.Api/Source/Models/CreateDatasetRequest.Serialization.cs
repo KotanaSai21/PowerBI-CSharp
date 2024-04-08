@@ -21,7 +21,7 @@ namespace Microsoft.PowerBI.Api.Models
             writer.WriteStartArray();
             foreach (var item in Tables)
             {
-                writer.WriteObjectValue(item);
+                writer.WriteObjectValue<Table>(item);
             }
             writer.WriteEndArray();
             if (Optional.IsCollectionDefined(Relationships))
@@ -30,7 +30,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Relationships)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Relationship>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -40,7 +40,7 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStartArray();
                 foreach (var item in Datasources)
                 {
-                    writer.WriteObjectValue(item);
+                    writer.WriteObjectValue<Datasource>(item);
                 }
                 writer.WriteEndArray();
             }
@@ -50,6 +50,14 @@ namespace Microsoft.PowerBI.Api.Models
                 writer.WriteStringValue(DefaultMode.Value.ToSerialString());
             }
             writer.WriteEndObject();
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<CreateDatasetRequest>(this);
+            return content;
         }
     }
 }

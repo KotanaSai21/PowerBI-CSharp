@@ -249,7 +249,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<CloneReportRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -447,7 +447,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<UpdateReportContentRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -537,7 +537,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<RebindReportRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -855,7 +855,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(updateRdlDatasourcesRequest);
+            content.JsonWriter.WriteObjectValue<UpdateRdlDatasourcesRequest>(updateRdlDatasourcesRequest);
             request.Content = content;
             return message;
         }
@@ -956,7 +956,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<ExportReportRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -1478,7 +1478,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<CloneReportRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -1696,7 +1696,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<UpdateReportContentRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -1798,7 +1798,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<RebindReportRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -1825,7 +1825,10 @@ namespace Microsoft.PowerBI.Api
         /// ## Required Scope
         ///
         /// Report.ReadWrite.All
-        /// &lt;br&gt;&lt;br&gt;
+        ///
+        /// ## Limitations
+        ///
+        /// Paginated reports are not supported.&lt;br&gt;&lt;br&gt;
         /// </remarks>
         public async Task<Response> RebindReportInGroupAsync(Guid groupId, Guid reportId, RebindReportRequest requestParameters, CancellationToken cancellationToken = default)
         {
@@ -1867,7 +1870,10 @@ namespace Microsoft.PowerBI.Api
         /// ## Required Scope
         ///
         /// Report.ReadWrite.All
-        /// &lt;br&gt;&lt;br&gt;
+        ///
+        /// ## Limitations
+        ///
+        /// Paginated reports are not supported.&lt;br&gt;&lt;br&gt;
         /// </remarks>
         public Response RebindReportInGroup(Guid groupId, Guid reportId, RebindReportRequest requestParameters, CancellationToken cancellationToken = default)
         {
@@ -2160,7 +2166,7 @@ namespace Microsoft.PowerBI.Api
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(updateRdlDatasourcesRequest);
+            content.JsonWriter.WriteObjectValue<UpdateRdlDatasourcesRequest>(updateRdlDatasourcesRequest);
             request.Content = content;
             return message;
         }
@@ -2267,7 +2273,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<ExportReportRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -2591,7 +2597,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<GenerateTokenRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -2718,7 +2724,7 @@ namespace Microsoft.PowerBI.Api
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(requestParameters);
+            content.JsonWriter.WriteObjectValue<GenerateTokenRequest>(requestParameters);
             request.Content = content;
             return message;
         }
@@ -2990,7 +2996,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// Maximum 1 request per 10 minutes.
+        /// Maximum 50 requests per hour or 5 requests per minute, per tenant.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public async Task<Response<AdminReports>> GetReportsAsAdminAsync(string filter = null, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
@@ -3032,7 +3038,7 @@ namespace Microsoft.PowerBI.Api
         ///
         /// ## Limitations
         ///
-        /// Maximum 1 request per 10 minutes.
+        /// Maximum 50 requests per hour or 5 requests per minute, per tenant.
         /// &lt;br&gt;&lt;br&gt;
         /// </remarks>
         public Response<AdminReports> GetReportsAsAdmin(string filter = null, int? top = null, int? skip = null, CancellationToken cancellationToken = default)

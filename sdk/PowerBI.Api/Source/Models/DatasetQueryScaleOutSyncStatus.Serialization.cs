@@ -7,7 +7,7 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace Microsoft.PowerBI.Api.Models
 {
@@ -19,16 +19,16 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<long> commitVersion = default;
-            Optional<DateTimeOffset> commitTimestamp = default;
-            Optional<long> targetSyncVersion = default;
-            Optional<DateTimeOffset> targetSyncTimestamp = default;
-            Optional<QueryScaleOutSyncTriggerReason> triggerReason = default;
-            Optional<DateTimeOffset> syncStartTime = default;
-            Optional<DateTimeOffset> syncEndTime = default;
-            Optional<long> minActiveReadVersion = default;
-            Optional<DateTimeOffset> minActiveReadTimestamp = default;
-            Optional<QueryScaleOutStatus> scaleOutStatus = default;
+            long? commitVersion = default;
+            DateTimeOffset? commitTimestamp = default;
+            long? targetSyncVersion = default;
+            DateTimeOffset? targetSyncTimestamp = default;
+            QueryScaleOutSyncTriggerReason? triggerReason = default;
+            DateTimeOffset? syncStartTime = default;
+            DateTimeOffset? syncEndTime = default;
+            long? minActiveReadVersion = default;
+            DateTimeOffset? minActiveReadTimestamp = default;
+            QueryScaleOutStatus? scaleOutStatus = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("commitVersion"u8))
@@ -122,7 +122,25 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasetQueryScaleOutSyncStatus(Optional.ToNullable(commitVersion), Optional.ToNullable(commitTimestamp), Optional.ToNullable(targetSyncVersion), Optional.ToNullable(targetSyncTimestamp), Optional.ToNullable(triggerReason), Optional.ToNullable(syncStartTime), Optional.ToNullable(syncEndTime), Optional.ToNullable(minActiveReadVersion), Optional.ToNullable(minActiveReadTimestamp), Optional.ToNullable(scaleOutStatus));
+            return new DatasetQueryScaleOutSyncStatus(
+                commitVersion,
+                commitTimestamp,
+                targetSyncVersion,
+                targetSyncTimestamp,
+                triggerReason,
+                syncStartTime,
+                syncEndTime,
+                minActiveReadVersion,
+                minActiveReadTimestamp,
+                scaleOutStatus);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasetQueryScaleOutSyncStatus FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasetQueryScaleOutSyncStatus(document.RootElement);
         }
     }
 }

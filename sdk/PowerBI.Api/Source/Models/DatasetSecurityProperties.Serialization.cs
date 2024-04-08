@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 using Azure.Core;
 
 namespace Microsoft.PowerBI.Api.Models
@@ -33,7 +34,7 @@ namespace Microsoft.PowerBI.Api.Models
             if (Optional.IsDefined(Encryption))
             {
                 writer.WritePropertyName("Encryption"u8);
-                writer.WriteObjectValue(Encryption);
+                writer.WriteObjectValue<Encryption>(Encryption);
             }
             writer.WriteEndObject();
         }
@@ -44,10 +45,10 @@ namespace Microsoft.PowerBI.Api.Models
             {
                 return null;
             }
-            Optional<bool> isEffectiveIdentityRequired = default;
-            Optional<bool> isEffectiveIdentityRolesRequired = default;
-            Optional<bool> isOnPremGatewayRequired = default;
-            Optional<Encryption> encryption = default;
+            bool? isEffectiveIdentityRequired = default;
+            bool? isEffectiveIdentityRolesRequired = default;
+            bool? isOnPremGatewayRequired = default;
+            Encryption encryption = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("IsEffectiveIdentityRequired"u8))
@@ -87,7 +88,23 @@ namespace Microsoft.PowerBI.Api.Models
                     continue;
                 }
             }
-            return new DatasetSecurityProperties(Optional.ToNullable(isEffectiveIdentityRequired), Optional.ToNullable(isEffectiveIdentityRolesRequired), Optional.ToNullable(isOnPremGatewayRequired), encryption.Value);
+            return new DatasetSecurityProperties(isEffectiveIdentityRequired, isEffectiveIdentityRolesRequired, isOnPremGatewayRequired, encryption);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DatasetSecurityProperties FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDatasetSecurityProperties(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestContent. </summary>
+        internal virtual RequestContent ToRequestContent()
+        {
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue<DatasetSecurityProperties>(this);
+            return content;
         }
     }
 }
